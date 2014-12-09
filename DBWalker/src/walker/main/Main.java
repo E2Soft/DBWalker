@@ -1,5 +1,7 @@
 package walker.main;
 
+import walker.gui.form.MainForm;
+
 
 public class Main {
 
@@ -13,6 +15,8 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+		
+		MainForm form = new MainForm();
 
 	}
 
