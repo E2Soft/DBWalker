@@ -198,22 +198,22 @@ public class WalkEngine {
 							
 							//povezujemo kolone
 							if(elem.getTagName() == "c:Columns"){
-								NodeList nodelist = elem.getChildNodes();
+								NodeList nodelist = elem.getChildNodes();//o:Column
 								for(int j=0;j<nodelist.getLength();j++){
 									if(nodelist.item(j) instanceof Element){
 										Element elm = (Element)nodelist.item(j);
 										
 										Column col = new Column(elm.getElementsByTagName("a:Name").item(0).getTextContent(), 
 													    	    elm.getElementsByTagName("a:Code").item(0).getTextContent(),
-													    	    elem.getAttribute("Id"));
-										
+													    	    elm.getAttribute("Id"));//BIO BUG umesto elm stajao elem koji nije imao ID pa nije prikazivao ispravno kolone
+
 										t.getCols().put(col.getId(), col);
 									}
 								}
 							//povezujemo kljuceve
 							//TODO:ovaj deo je dosta LUD, skontati da li moze bolje i brze!!!!!!!	
 							}else if(elem.getTagName().equals("c:Keys")){
-								NodeList nodelist = elem.getChildNodes();
+								NodeList nodelist = elem.getChildNodes();//o:Key tag
 								for(int j=0;j<nodelist.getLength();j++){
 									if(nodelist.item(j) instanceof Element){
 										Element elm = (Element)nodelist.item(j);
@@ -225,7 +225,7 @@ public class WalkEngine {
 													NodeList keyNodes = keyelm.getChildNodes();
 													for(int y=0;y<keyNodes.getLength();y++){
 														if(keyNodes.item(y) instanceof Element){
-															String id = ((Element)keyNodes.item(y)).getAttribute("Id");
+															String id = ((Element)keyNodes.item(y)).getAttribute("Ref");//getAttribute("Id") je bilo i to nije ok
 															for(String colId : t.getCols().keySet()){
 																if(id.equals(colId)){
 																	t.getKeys().add(t.getCols().get(id));

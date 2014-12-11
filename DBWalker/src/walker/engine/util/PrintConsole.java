@@ -21,10 +21,10 @@ public class PrintConsole {
 		System.out.println(p.getName());
 		
 		for (Table t : p.getTables().values()) {
-			System.out.println(t.getName());
+			System.out.println("RABLE:"+t.getName());
 			
 			if(t.getCols().values().size() > 0){
-				System.out.println("----COLUMMN----");
+				System.out.println("----COLUMMN----"+t.getCols().values().size());
 				for(Column name : t.getCols().values()){
 					System.out.println(name.getName());
 				}
@@ -32,7 +32,7 @@ public class PrintConsole {
 			}
 			
 			if(t.getKeys().size() > 0){
-				System.out.println("----KEYS----");
+				System.out.println("----KEYS----"+t.getKeys().size());
 				for(Column key : t.getKeys()){
 					System.out.println(key.getName());
 				}
