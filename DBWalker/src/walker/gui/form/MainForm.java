@@ -10,6 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
+import walker.gui.panel.TablePanel;
+import walker.gui.proba.ChildPanel;
+import walker.gui.proba.ParentPanel;
+
 public class MainForm extends JFrame {
 	
 	
@@ -26,8 +30,8 @@ public class MainForm extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int width = (int)screenSize.getWidth() / 2;
-		int height = (int)screenSize.getHeight() / 2;
+		int width = (int)screenSize.getWidth()*3/4;
+		int height = (int)screenSize.getHeight()*3/4;
 		setSize(width, height);
 	}
 	
@@ -40,9 +44,10 @@ public class MainForm extends JFrame {
 		JPanel panel = new JPanel(new BorderLayout());
 		
 		JPanel parrentPAnel = new JPanel();
+		//TablePanel tablePanel = new TablePanel();
+
 		parrentPAnel.setOpaque(true);
 		parrentPAnel.setBackground(Color.red);
-		
 		JPanel childsPanel = new JPanel();
 		childsPanel.setOpaque(true);
 		childsPanel.setBackground(Color.green);

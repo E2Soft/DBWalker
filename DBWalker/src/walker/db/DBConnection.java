@@ -19,15 +19,16 @@ public class DBConnection {
 			}
 		return conn;
 	}
+	
 	public static void open() throws ClassNotFoundException, SQLException {
 		if (conn != null)
 			return;
-		ResourceBundle bundle =
-				PropertyResourceBundle.getBundle("DBConnection"); //ime fajla
-		String driver = bundle.getString("driver"); //Ime parametara
-		String url = bundle.getString("url");
+		ResourceBundle bundle = PropertyResourceBundle.getBundle("DBConnection"); //ime fajla
+		String driver = bundle.getString("microsoftDriver"); //Ime parametara
+		String url = bundle.getString("microsoftUrl");
 		String username = bundle.getString("username");  
 		String password = bundle.getString("password");
+		
 		Class.forName(driver); //Registrovanje drajvera
 		conn = DriverManager.getConnection(url, username, password);
 		conn.setAutoCommit(false);
