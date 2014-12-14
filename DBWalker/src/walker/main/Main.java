@@ -1,22 +1,28 @@
 package walker.main;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import walker.engine.WalkEngine;
+import walker.engine.model.Package;
 import walker.gui.form.MainForm;
 
 public class Main {
 
-	public static void main(String[] args) {
-		/*try {
-			Package pckg = WalkEngine.getPackage("C:\\Users\\Milos\\Desktop\\testXML.xml");
+	public static void main(String[] args) throws SAXException, IOException {
+		try {
+			Package pckg = WalkEngine.getPackage("data/testXML.xml");
+			//PrintConsole.print(pckg);	
 			
-			PrintConsole.print(pckg);
-			
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			// TODO Auto-generated catch block
+		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
-		}*/
+		}
 		
-		MainForm form = new MainForm();
-
+		MainForm mainForm = new MainForm();
+		mainForm.setVisible(true);
 	}
 
 }

@@ -28,8 +28,8 @@ public class MainForm extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int width = (int)screenSize.getWidth() / 2;
-		int height = (int)screenSize.getHeight() / 2;
+		int width = (int)screenSize.getWidth()*3/4;
+		int height = (int)screenSize.getHeight()*3/4;
 		setSize(width, height);
 	}
 	
@@ -40,9 +40,10 @@ public class MainForm extends JFrame {
 		tree.setBackground(Color.white);
 
 		JPanel parrentPAnel = new JPanel();
+		//TablePanel tablePanel = new TablePanel();
+
 		parrentPAnel.setOpaque(true);
 		parrentPAnel.setBackground(Color.red);
-		
 		JPanel childsPanel = new JPanel();
 		childsPanel.setOpaque(true);
 		childsPanel.setBackground(Color.green);
@@ -52,7 +53,7 @@ public class MainForm extends JFrame {
 		JScrollPane HscrollParrent = new JScrollPane(parrentPAnel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		JSplitPane Hspliter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, HscrollParrent, HscrollChild);
-		Hspliter.setDividerLocation(800);
+		Hspliter.setDividerLocation(400);
 		Hspliter.setOneTouchExpandable(true);
 		
 		JScrollPane Vscroll = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
