@@ -79,28 +79,15 @@ public class Table extends NodeElement {
             return tables;
         }             
         
-        public List<String> getColumns(String tableId) {
-            List<String> columns = null;
-            try {
-                Package p = WalkEngine.getPackage("data/testXML.xml");
-                for(Table table : p.getTables().values()){
-                    if(table.getCols().values().size() > 0){ 
-                        Table t = p.getTables().get(tableId);
-                        columns = new ArrayList<String>();                       
-                        for(Column c : t.getCols().values()){
-                            String name = c.getName();
-                            columns.add(name);
-                        }
-                    }
-                }          
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } 
-            return columns;
+        public List<String> getColumns(){
+           List<String> columns = null;
+          
+            for(Column column : cols.values()){
+                columns = new ArrayList<String>();                
+                String name = column.getName();
+                    columns.add(name);
+            }
+            return columns;                   
         }
 
         public String getBasicSQLSelect(){
