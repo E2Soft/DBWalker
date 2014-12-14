@@ -2,7 +2,6 @@ package walker.main;
 
 import walker.gui.form.MainForm;
 
-
 public class Main {
 
 	public static void main(String[] args) {

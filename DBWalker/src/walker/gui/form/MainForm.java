@@ -3,8 +3,10 @@ package walker.gui.form;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -36,9 +38,7 @@ public class MainForm extends JFrame {
 		JPanel tree = new JPanel();
 		tree.setOpaque(true);
 		tree.setBackground(Color.white);
-		
-		JPanel panel = new JPanel(new BorderLayout());
-		
+
 		JPanel parrentPAnel = new JPanel();
 		parrentPAnel.setOpaque(true);
 		parrentPAnel.setBackground(Color.red);
@@ -47,21 +47,59 @@ public class MainForm extends JFrame {
 		childsPanel.setOpaque(true);
 		childsPanel.setBackground(Color.green);
 		
-		JScrollPane HscrollChild = new JScrollPane(childsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		JScrollPane HscrollParrent = new JScrollPane(parrentPAnel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		JScrollPane HscrollChild = new JScrollPane(childsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		HscrollChild.setMinimumSize(new Dimension(250, 250));
+		JScrollPane HscrollParrent = new JScrollPane(parrentPAnel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		JSplitPane Hspliter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, HscrollParrent, HscrollChild);
-		Hspliter.setMinimumSize(new Dimension(2000, 2000));
-		
-		Hspliter.setDividerLocation(10000);
+		Hspliter.setDividerLocation(800);
 		Hspliter.setOneTouchExpandable(true);
 		
-		panel.add(Hspliter, BorderLayout.CENTER);
+		JScrollPane Vscroll = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		JScrollPane Vscroll = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		JSplitPane Vspliter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, Vscroll, panel);
-		Vspliter.setMinimumSize(new Dimension(250, 250));
+		JPanel leftPanel = new JPanel(new BorderLayout());
+		leftPanel.setMinimumSize(new Dimension(250, 250));
 		
+		GridLayout grid = new GridLayout(3, 4);
+		grid.setVgap(20);
+		grid.setHgap(20);
+		JPanel jostick = new JPanel(grid);
+		jostick.setOpaque(true);
+		jostick.setBackground(Color.YELLOW);
+		jostick.setPreferredSize(new Dimension(150, 150));
+		
+		JButton W = new JButton("W");
+		JButton A = new JButton("A");
+		JButton S = new JButton("S");
+		JButton D = new JButton("D");
+		
+		JPanel mid = new JPanel();
+		mid.setOpaque(false);
+		JPanel mid2 = new JPanel();
+		mid2.setOpaque(false);
+		JPanel mid3 = new JPanel();
+		mid3.setOpaque(false);
+		JPanel mid4 = new JPanel();
+		mid4.setOpaque(false);
+		JPanel mid5 = new JPanel();
+		mid5.setOpaque(false);
+		JPanel mid6 = new JPanel();
+		mid6.setOpaque(false);
+		
+		jostick.add(mid);
+		jostick.add(W);
+		jostick.add(mid2);
+		jostick.add(A);
+		jostick.add(mid3);
+		jostick.add(S);
+		jostick.add(mid4);
+		jostick.add(D);
+		jostick.add(mid5);
+		
+		leftPanel.add(Vscroll, BorderLayout.CENTER);
+		leftPanel.add(jostick, BorderLayout.SOUTH);
+		
+		JSplitPane Vspliter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, Hspliter);
 		Vspliter.setDividerLocation(250);
 		Vspliter.setOneTouchExpandable(true);
 		

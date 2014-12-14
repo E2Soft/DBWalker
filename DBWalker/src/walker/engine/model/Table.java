@@ -42,9 +42,30 @@ public class Table extends NodeElement {
 			return name;
 		}
 		
-		public String getBasicSQLSelect(){
+		public String getBasicSQLSelectStarQuery(){
 			
 			return "SELECT * FROM "+name;
+		}
+		
+		public String getBasicSQLSelectQuery(){
+			
+			String select = "SELECT ";
+			String table = " FROM " + name;
+			String params = "";
+			int i = 0;
+			
+			for (Column column : cols.values()) {
+				if(i == 0){
+					params+=column.getCode();
+				}else if(i <= cols.values().size()-1){
+					params+= ","+column.getCode();
+				}
+				i++;
+			}
+			
+			String query = select + params + table;
+			
+			return query;
 		}
 
 }

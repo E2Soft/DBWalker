@@ -7,6 +7,8 @@ import walker.engine.model.Package;
 public class PrintConsole {
 	
 	private static void voidTables(Table table){
+		System.out.println("----VEZE----");
+		
 		System.out.println("Roditelji:");
 		for(Table t : table.getParrents()){
 			System.out.println("\t"+t.getName());
@@ -15,39 +17,65 @@ public class PrintConsole {
 		for(Table t : table.getChildren()){
 			System.out.println("\t"+t.getName());
 		}
+		
+		System.out.println("------------");
+	}
+	
+	private static void printColumns(Table table){
+		if(table.getCols().values().size() > 0){
+			System.out.println("----COLUMMN----"+table.getCols().values().size());
+			
+			for(Column name : table.getCols().values()){
+				System.out.println(name.getName());
+			}
+			
+			System.out.println("------------");
+		}
+	}
+	
+	private static void printKeys(Table table) {
+		if(table.getKeys().size() > 0){
+			System.out.println("----KEYS----"+table.getKeys().size());
+			
+			for(Column key : table.getKeys()){
+				System.out.println(key.getName());
+			}
+			
+			System.out.println("------------");
+		}
+	}
+	
+	private static void printBasicSQL(Table table) {
+		if(table.getCols().values().size() > 0){
+			System.out.println("----BASIC-QUERY----");
+			
+			System.out.println(table.getBasicSQLSelectQuery());
+			
+			System.out.println("-------------------");
+		}
 	}
 	
 	public static void print(Package p){
-		System.out.println(p.getName());
+		System.out.println("/-------------------------------------------/");
+		System.out.println("PAKET:"+p.getName());
 		
 		for (Table t : p.getTables().values()) {
-			System.out.println("RABLE:"+t.getName());
+			System.out.println("TABLE:"+t.getName());
 			
-			if(t.getCols().values().size() > 0){
-				System.out.println("----COLUMMN----"+t.getCols().values().size());
-				for(Column name : t.getCols().values()){
-					System.out.println(name.getName());
-				}
-				System.out.println("------------");
-			}
+			printColumns(t);
 			
-			if(t.getKeys().size() > 0){
-				System.out.println("----KEYS----"+t.getKeys().size());
-				for(Column key : t.getKeys()){
-					System.out.println(key.getName());
-				}
-				System.out.println("------------");
-			}
+			printKeys(t);
 			
-			System.out.println("----VEZE----");
 			voidTables(t);
-			System.out.println("------------");
+			
+			printBasicSQL(t);
 		}
 		
 		for(Package pt : p.getSubpacks()){
 			print(pt);
-			System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 		}
+		
+		System.out.println("/-------------------------------------------/");
 	}
 	
 }
