@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,7 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-public class MainForm extends JFrame {
+import walker.main.AppState;
+
+public class MainForm extends JFrame implements Observer{
 	
 	
 	public MainForm() {
@@ -110,5 +114,30 @@ public class MainForm extends JFrame {
 	private void positionAndShow(){
 		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+
+	@Override
+	public void update(Observable o, Object arg)
+	{
+		if(o instanceof AppState)
+		{
+			AppState appState = (AppState)o;
+			
+			if(AppState.CURRENT_TABLE_CHANGED.equals(arg))
+			{
+				// TODO CURRENT_TABLE_CHANGED
+				// ako je promenjena tabela updateuj podatke u tabelama
+				//parentPanel.updateData(appState.getCurrentTable());
+				//childrenPanel.updateData(appState.getCurrentTable());
+			}
+			else if(AppState.SCHEMA_MODEL_CHANGED.equals(arg))
+			{
+				// TODO SCHEMA_MODEL_CHANGED
+				// ako je promenjena sema obrisi podatke iz tabela i updateuj stablo
+				//parentPanel.updateData(null);
+				//childrenPanel.updateData(null);
+				//tree.updateData(appState.getSchemaModel());
+			}
+		}
 	}
 }
