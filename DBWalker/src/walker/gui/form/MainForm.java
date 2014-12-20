@@ -13,18 +13,46 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.ToolTipManager;
+
+import walker.gui.workspace.WorkspaceTree;
+import walker.tree.model.workspace.Project;
+import walker.tree.model.workspace.WorkspaceModel;
 
 import walker.main.AppState;
 
 public class MainForm extends JFrame implements Observer{
 	
 	
+	
+	
+	private WorkspaceModel workspaceModel;
+    private WorkspaceTree workspaceTree;
+	
 	public MainForm() {
 		initMainFrame();
+		
+		initTreeWorkspace();
 		
 		initMainLayout();
 		
 		positionAndShow();
+		
+		
+	}
+	
+	private void initTreeWorkspace(){
+		
+		workspaceModel = new WorkspaceModel();
+		workspaceTree=new WorkspaceTree();
+		
+//		Project p = new Project("p1");
+//		workspaceModel.addProject(p);
+//		workspaceTree.addProject(p);
+		
+		
+		workspaceTree.setModel(workspaceModel);
+		ToolTipManager.sharedInstance().registerComponent(workspaceTree);
 	}
 	
 	private void initMainFrame(){
@@ -36,6 +64,8 @@ public class MainForm extends JFrame implements Observer{
 		int height = (int)screenSize.getHeight()*3/4;
 		setSize(width, height);
 	}
+	
+	
 	
 	private void initMainLayout(){
 		
@@ -61,6 +91,37 @@ public class MainForm extends JFrame implements Observer{
 		Hspliter.setOneTouchExpandable(true);
 		
 		JScrollPane Vscroll = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		tree.setLayout(new BorderLayout(0, 0));
+		
+		//ja
+		//stablo = new JTree();
+		
+		tree.add(workspaceTree);//dodaj stablo na panel
+		
+		//test part
+		Project project1 = new Project("project1");
+		Project project2 = new Project("project2");
+		
+		walker.tree.model.workspace.Package paket1 = new walker.tree.model.workspace.Package(null);
+		walker.tree.model.workspace.Package podPaket1 = new walker.tree.model.workspace.Package(paket1);
+		
+		paket1.setNazivPaketa("paket1");
+		podPaket1.setNazivPaketa("pod paket paketa 1");
+		
+		//dodela paketa projektu
+		project1.addPackage(paket1);
+		
+		//dodela paketa paketu
+		paket1.addPackageToPackage(podPaket1);
+		
+		//dodela projekata workspace-u
+		workspaceTree.addProject(project1);
+		workspaceTree.addProject(project2);
+		
+		
+		
+		//end ja
+		
 		
 		JPanel leftPanel = new JPanel(new BorderLayout());
 		leftPanel.setMinimumSize(new Dimension(250, 250));
@@ -108,7 +169,7 @@ public class MainForm extends JFrame implements Observer{
 		Vspliter.setDividerLocation(250);
 		Vspliter.setOneTouchExpandable(true);
 		
-		add(Vspliter);
+		getContentPane().add(Vspliter);
 	}
 	
 	private void positionAndShow(){
