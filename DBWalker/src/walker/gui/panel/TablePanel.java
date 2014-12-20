@@ -38,7 +38,7 @@ public class TablePanel extends JPanel{
         Table t = new Table("A","A","o19");
         String name = t.getName();
         String id = t.getId();
-        columns = t.getColumns(id);
+        //columns = t.getColumns(id); prijavljuje error
 
         try {
             data = tableData.getTableData(name);
