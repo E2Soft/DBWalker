@@ -1,33 +1,33 @@
 package walker.gui.panel;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import walker.engine.model.Table;
 import walker.table.GenericTableModel;
-import walker.table.TableDataDB;
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.Dimension;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableCellRenderer;
+import walker.table.TableData;
 
 public class TablePanel extends JPanel{
     private static final long serialVersionUID = 1L;
     
     private JTable panelTable;
     private GenericTableModel genericTableModel;
-    private TableDataDB tableData;
-    private List<List<String>> data;
+    private TableData tableData;
     private List<String> columns;
     private DefaultTableCellRenderer centerRenderer;
 
-    public TablePanel() {
-        tableData = new TableDataDB();
-        data = new ArrayList<List<String>>();
+    public TablePanel(TableData tableData) {
+        this.tableData = tableData;
         columns = new ArrayList<String>();
         initComponents();      
     }
@@ -49,23 +49,14 @@ public class TablePanel extends JPanel{
     public void updateData(Table table){
         
         columns = table.getColumns();
+        List<List<String>> data = null;
 
-        /*try {
-            data = m.getTableData(table);
+        try {
+            data = tableData.getTableData(table);
         } catch (SQLException e) {
             e.printStackTrace();
-        }*/
+        }
         
-        List<String> list1 = new ArrayList<String>();
-        list1.add("Podaci");
-        list1.add("Podaci");
-        
-        List<String> list2 = new ArrayList<String>();
-        list2.add("Podaci");
-        list2.add("Podaci");
-
-        data.add(list1);
-        data.add(list2);
         genericTableModel = new GenericTableModel(columns, data);
         panelTable.setModel(genericTableModel);
         

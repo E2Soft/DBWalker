@@ -19,24 +19,26 @@ import walker.controller.Controller;
 import walker.gui.panel.ChildrenTablePanel;
 import walker.gui.panel.TablePanel;
 import walker.gui.workspace.WorkspaceTree;
+import walker.main.AppState;
+import walker.table.TableData;
 import walker.tree.model.workspace.Project;
 import walker.tree.model.workspace.WorkspaceModel;
 
-import walker.main.AppState;
-
 public class MainForm extends JFrame implements Observer{
 
+	private static final long serialVersionUID = 1L;
+	
 	private WorkspaceModel workspaceModel;
     private WorkspaceTree workspaceTree;
 	private ChildrenTablePanel childrenTablePanel;
     private TablePanel tablePanel;
     
-	public MainForm(Controller controller) {
+	public MainForm(Controller controller, TableData tableData) {
 		initMainFrame();
 		
 		initTreeWorkspace();
 		
-		initMainLayout(controller);
+		initMainLayout(controller, tableData);
 		
 		positionAndShow();		
 	}
@@ -65,7 +67,7 @@ public class MainForm extends JFrame implements Observer{
 		setSize(width, height);
 	}
 	
-	private void initMainLayout(Controller controller){
+	private void initMainLayout(Controller controller, TableData tableData){
 		
 		JPanel tree = new JPanel();
 		tree.setOpaque(true);
@@ -79,8 +81,8 @@ public class MainForm extends JFrame implements Observer{
 		childsPanel.setOpaque(true);
 		childsPanel.setBackground(Color.green);
 		
-		childrenTablePanel = new ChildrenTablePanel(controller);
-		tablePanel = new TablePanel();
+		childrenTablePanel = new ChildrenTablePanel(controller, tableData);
+		tablePanel = new TablePanel(tableData);
 		JScrollPane HscrollChild = new JScrollPane(childrenTablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		HscrollChild.setMinimumSize(new Dimension(250, 250));
 		JScrollPane HscrollParrent = new JScrollPane(tablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

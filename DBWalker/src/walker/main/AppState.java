@@ -1,5 +1,6 @@
 package walker.main;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
@@ -14,6 +15,11 @@ public class AppState extends Observable
 	private Table currentTable;
 	private Package schemaModel;
 	private Map<String, Table> allTables;
+	
+	public AppState()
+	{
+		allTables = new HashMap<>();
+	}
 		
 	public Table getCurrentTable()
 	{
@@ -44,6 +50,7 @@ public class AppState extends Observable
 		mapTables(schemaModel);
 		
 		currentTable = null;
+		setChanged();
 		notifyObservers(SCHEMA_MODEL_CHANGED);
 	}
 	

@@ -6,8 +6,10 @@ import org.xml.sax.SAXException;
 
 import walker.controller.Controller;
 import walker.engine.model.Column;
+import walker.engine.model.Package;
 import walker.engine.model.Table;
 import walker.gui.form.MainForm;
+import walker.table.TableDataInMemory;
 
 public class Main {
 	
@@ -16,7 +18,8 @@ public class Main {
 		AppState appState = new AppState();
 
         Controller controller = new Controller(appState);
-		MainForm mainForm = new MainForm(controller);
+        TableDataInMemory tableData = new TableDataInMemory();
+		MainForm mainForm = new MainForm(controller, tableData);
 		
 		// view prati trenutno stanje aplikacije
 		appState.addObserver(mainForm);
@@ -37,19 +40,32 @@ public class Main {
 		
 		parent.getChildren().add(child1);
 		parent.getChildren().add(child2);
-		//parent.getChildren().add(child3);
+		parent.getChildren().add(child3);
 		
-		parent.getCols().put("col1", new Column("col1", "col1", "col1"));
-        parent.getCols().put("col2", new Column("col2", "col2", "col2"));
+		parent.getCols().put("parent_col1", new Column("parent_col1", "parent_col1", "parent_col1"));
+        parent.getCols().put("parent_col2", new Column("parent_col2", "parent_col2", "parent_col2"));
         
-        child1.getCols().put("a_col1", new Column("a_col1", "a_col1", "a_col1"));
-        child1.getCols().put("a_col2", new Column("a_col2", "a_col2", "a_col2"));
+        child1.getCols().put("child1_col1", new Column("child1_col1", "child1_col1", "child1_col1"));
+        child1.getCols().put("child1_col2", new Column("child1_col2", "child1_col2", "child1_col2"));
         
-        child2.getCols().put("b_col1", new Column("b_col1", "b_col1", "b_col1"));
-        child2.getCols().put("b_col2", new Column("b_col2", "b_col2", "b_col2"));
+        child2.getCols().put("child2_col1", new Column("child2_col1", "child2_col1", "child2_col1"));
+        child2.getCols().put("child2_col2", new Column("child2_col2", "child2_col2", "child2_col2"));
         
-        child3.getCols().put("c_col1", new Column("c_col1", "c_col1", "c_col1"));
-        child3.getCols().put("c_col2", new Column("c_col2", "c_col2", "c_col2"));    
+        child3.getCols().put("child3_col1", new Column("child3_col1", "child3_col1", "child3_col1"));
+        child3.getCols().put("child3_col2", new Column("child3_col2", "child3_col2", "child3_col2"));
+        
+        Package schemaPackage = new Package("root", "root",  "root");
+        schemaPackage.getTables().put(parent.getCode(), parent);
+        schemaPackage.getTables().put(child1.getCode(), child1);
+        schemaPackage.getTables().put(child2.getCode(), child2);
+        schemaPackage.getTables().put(child3.getCode(), child3);
+        
+        tableData.addGenericData("parent", "parent_data", 5, 2);
+        tableData.addGenericData("child1", "child1_data", 5, 2);
+        tableData.addGenericData("child2", "child2_data", 5, 2);
+        tableData.addGenericData("child3", "child3_data", 5, 2);
+        
+        appState.setSchemaModel(schemaPackage);
         
         appState.setCurrentTable(parent);
 	}

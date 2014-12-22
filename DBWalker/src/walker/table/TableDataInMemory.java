@@ -2,32 +2,43 @@ package walker.table;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import walker.engine.model.Table;
 
-public class TableDataInMemory implements TableData{ 
-    
-    public TableDataInMemory() {
-        super();
-    }
+public class TableDataInMemory implements TableData
+{
 
-    @Override
-    public List<List<String>> getTableData(Table table) throws SQLException {
+	Map<String, List<List<String>>> dataStore;
 
-        List<List<String>> listOfLists = new ArrayList<List<String>>();     
-        
-        List<String> list1 = new ArrayList<String>();
-        list1.add("Petar");
-        list1.add("Petrovic");
-        
-        List<String> list2 = new ArrayList<String>();
-        list2.add("Marko");
-        list2.add("Markovic");
+	public TableDataInMemory()
+	{
+		dataStore = new HashMap<>();
+	}
 
-        listOfLists.add(list1);
-        listOfLists.add(list2);
-        return listOfLists;
-    }
+	@Override
+	public List<List<String>> getTableData(Table table) throws SQLException
+	{
+		return dataStore.get(table.getCode());
+	}
 
+	public void addGenericData(String tableCode, String dataPrefix, int rowNum, int columnNum)
+	{
+		List<List<String>> rows = new ArrayList<List<String>>();
+
+		for (int i = 0; i < rowNum; i++)
+		{
+			List<String> row = new ArrayList<String>();
+			for (int j = 0; j < columnNum; j++)
+			{
+				row.add(dataPrefix + "_" + i + "_" + j);
+			}
+			
+			rows.add(row);
+		}
+
+		dataStore.put(tableCode, rows);
+	}
 }
