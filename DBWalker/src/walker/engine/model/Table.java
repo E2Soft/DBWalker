@@ -1,16 +1,9 @@
 package walker.engine.model;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
-import walker.engine.WalkEngine;
 
 public class Table extends NodeElement {
 	    //name - key code value in db
@@ -80,13 +73,11 @@ public class Table extends NodeElement {
         }             
         
         public List<String> getColumns(){
-           List<String> columns = null;
-          
-            for(Column column : cols.values()){
-                columns = new ArrayList<String>();                
-                String name = column.getName();
-                    columns.add(name);
-            }
+           List<String> columns = new ArrayList<String>();             
+           for(Column column : cols.values()){
+               String name = column.getName();
+               columns.add(name);
+           }            
             return columns;                   
         }
 

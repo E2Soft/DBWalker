@@ -15,6 +15,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ToolTipManager;
 
+import walker.controller.Controller;
+import walker.gui.panel.ChildrenTablePanel;
+import walker.gui.panel.TablePanel;
 import walker.gui.workspace.WorkspaceTree;
 import walker.tree.model.workspace.Project;
 import walker.tree.model.workspace.WorkspaceModel;
@@ -22,23 +25,20 @@ import walker.tree.model.workspace.WorkspaceModel;
 import walker.main.AppState;
 
 public class MainForm extends JFrame implements Observer{
-	
-	
-	
-	
+
 	private WorkspaceModel workspaceModel;
     private WorkspaceTree workspaceTree;
-	
-	public MainForm() {
+	private ChildrenTablePanel childrenTablePanel;
+    private TablePanel tablePanel;
+    
+	public MainForm(Controller controller) {
 		initMainFrame();
 		
 		initTreeWorkspace();
 		
-		initMainLayout();
+		initMainLayout(controller);
 		
-		positionAndShow();
-		
-		
+		positionAndShow();		
 	}
 	
 	private void initTreeWorkspace(){
@@ -65,29 +65,28 @@ public class MainForm extends JFrame implements Observer{
 		setSize(width, height);
 	}
 	
-	
-	
-	private void initMainLayout(){
+	private void initMainLayout(Controller controller){
 		
 		JPanel tree = new JPanel();
 		tree.setOpaque(true);
 		tree.setBackground(Color.white);
 
 		JPanel parrentPAnel = new JPanel();
-		//TablePanel tablePanel = new TablePanel();
-
 		parrentPAnel.setOpaque(true);
 		parrentPAnel.setBackground(Color.red);
+		
 		JPanel childsPanel = new JPanel();
 		childsPanel.setOpaque(true);
 		childsPanel.setBackground(Color.green);
 		
-		JScrollPane HscrollChild = new JScrollPane(childsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		childrenTablePanel = new ChildrenTablePanel(controller);
+		tablePanel = new TablePanel();
+		JScrollPane HscrollChild = new JScrollPane(childrenTablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		HscrollChild.setMinimumSize(new Dimension(250, 250));
-		JScrollPane HscrollParrent = new JScrollPane(parrentPAnel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JScrollPane HscrollParrent = new JScrollPane(tablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		JSplitPane Hspliter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, HscrollParrent, HscrollChild);
-		Hspliter.setDividerLocation(400);
+		Hspliter.setDividerLocation(260);
 		Hspliter.setOneTouchExpandable(true);
 		
 		JScrollPane Vscroll = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -163,7 +162,7 @@ public class MainForm extends JFrame implements Observer{
 		jostick.add(mid5);
 		
 		leftPanel.add(Vscroll, BorderLayout.CENTER);
-		leftPanel.add(jostick, BorderLayout.SOUTH);
+	//	leftPanel.add(jostick, BorderLayout.SOUTH);
 		
 		JSplitPane Vspliter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, Hspliter);
 		Vspliter.setDividerLocation(250);
@@ -185,11 +184,11 @@ public class MainForm extends JFrame implements Observer{
 			AppState appState = (AppState)o;
 			
 			if(AppState.CURRENT_TABLE_CHANGED.equals(arg))
-			{
+			{			    
 				// TODO CURRENT_TABLE_CHANGED
 				// ako je promenjena tabela updateuj podatke u tabelama
-				//parentPanel.updateData(appState.getCurrentTable());
-				//childrenPanel.updateData(appState.getCurrentTable());
+				tablePanel.updateData(appState.getCurrentTable());
+				childrenTablePanel.update(appState.getCurrentTable());
 			}
 			else if(AppState.SCHEMA_MODEL_CHANGED.equals(arg))
 			{

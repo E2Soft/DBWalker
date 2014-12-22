@@ -14,7 +14,7 @@ public class AppState extends Observable
 	private Table currentTable;
 	private Package schemaModel;
 	private Map<String, Table> allTables;
-	
+		
 	public Table getCurrentTable()
 	{
 		return currentTable;
@@ -23,6 +23,7 @@ public class AppState extends Observable
 	public void setCurrentTable(Table currentTable)
 	{
 		this.currentTable = currentTable;
+		setChanged();
 		notifyObservers(CURRENT_TABLE_CHANGED);
 	}
 	
@@ -55,7 +56,7 @@ public class AppState extends Observable
 		
 		for(Table table : pack.getTables().values())
 		{
-			allTables.put(table.getCode(), table);
+			allTables.put(table.getCode(), table);			
 		}
 	}
 
