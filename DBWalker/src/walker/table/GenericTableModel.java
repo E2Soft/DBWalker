@@ -2,10 +2,11 @@ package walker.table;
 
 import java.util.List;
 
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
+import javax.swing.table.AbstractTableModel;
 
-public class GenericTableModel implements TableModel{
+public class GenericTableModel extends AbstractTableModel{
+    
+    private static final long serialVersionUID = 1L;
     
     protected List<String> columns;
     protected List<List<String>> data;
@@ -31,25 +32,10 @@ public class GenericTableModel implements TableModel{
     public void setData(List<List<String>> data) {
         this.data = data;
     }
-   
-    @Override
-    public void addTableModelListener(TableModelListener l) {
-        
-    }
-
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        return String.class;
-    }
 
     @Override
     public int getColumnCount() {
         return columns.size();
-    }
-
-    @Override
-    public String getColumnName(int columnIndex) {
-        return columns.get(columnIndex);
     }
 
     @Override
@@ -64,18 +50,7 @@ public class GenericTableModel implements TableModel{
     }
 
     @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
+    public String getColumnName(int columnIndex) {
+        return columns.get(columnIndex);
     }
-
-    @Override
-    public void removeTableModelListener(TableModelListener l) {
-        
-    }
-
-    @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        
-    }
-
 }
