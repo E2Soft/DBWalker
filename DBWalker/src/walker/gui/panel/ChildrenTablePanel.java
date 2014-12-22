@@ -1,25 +1,27 @@
 package walker.gui.panel;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
 
 import walker.controller.Controller;
-import walker.controller.ScrollChildrenAction;
 import walker.engine.model.Table;
 import walker.table.TableData;
-
-import java.awt.Dimension;
-
-import javax.swing.JSplitPane;
 
 public class ChildrenTablePanel extends JPanel{
 
     private static final long serialVersionUID = 1L;
+    
+	public static final String LEFT = "LEFT";
+	public static final String RIGHT = "RIGHT";
     
     private JButton shiftLeftBtn;
     private JButton shiftRightBtn;
@@ -27,6 +29,9 @@ public class ChildrenTablePanel extends JPanel{
     private ChildTablePanel firstChildTablePanel;
     private ChildTablePanel secondChildTablePanel;
     private JSplitPane splitPane;
+    private List<Table> childrenTables;
+    private int leftIndex = 0;
+    private int rightIndex = 1;
 
     public ChildrenTablePanel(Controller controller, TableData tableData) {
         super();
@@ -37,18 +42,20 @@ public class ChildrenTablePanel extends JPanel{
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(new BorderLayout(5, 5));
         
+        ScrollChildrenActionListener scrollActionListener = new ScrollChildrenActionListener();
+        
         shiftLeftBtn = new JButton();
         shiftLeftBtn.setPreferredSize(new Dimension(25,100));
         shiftLeftBtn.setIcon(new ImageIcon("icons/previous_16x16.png"));   
-        shiftLeftBtn.addActionListener(new ScrollChildrenAction());
-        shiftLeftBtn.setActionCommand(ScrollChildrenAction.LEFT);
+        shiftLeftBtn.addActionListener(scrollActionListener);
+        shiftLeftBtn.setActionCommand(LEFT);
         add(shiftLeftBtn, BorderLayout.WEST);
         
         shiftRightBtn = new JButton();
         shiftRightBtn.setPreferredSize(new Dimension(25,100));
         shiftRightBtn.setIcon(new ImageIcon("icons/next_16x16.png"));
-        shiftRightBtn.addActionListener(new ScrollChildrenAction());
-        shiftRightBtn.setActionCommand(ScrollChildrenAction.RIGHT);
+        shiftRightBtn.addActionListener(scrollActionListener);
+        shiftRightBtn.setActionCommand(RIGHT);
         add(shiftRightBtn, BorderLayout.EAST);
         
         panel = new JPanel();
@@ -69,7 +76,9 @@ public class ChildrenTablePanel extends JPanel{
     
     public void update(Table table) {
         
-        int childrenNumber = table.getChildren().size();
+    	childrenTables = table.getChildren();
+    	
+        int childrenNumber = childrenTables.size();
         
         setVisible(childrenNumber != 0);
         
@@ -84,13 +93,68 @@ public class ChildrenTablePanel extends JPanel{
                 shiftRightBtn.setVisible(false);
             }     
             
-            if(childrenNumber == 1) {
-                firstChildTablePanel.updateData(table.getChildren().get(0));
-            } else {
-                firstChildTablePanel.updateData(table.getChildren().get(0));
-                secondChildTablePanel.updateData(table.getChildren().get(1));
-            }
+            leftIndex = 0;
+            rightIndex = 1;
+            updateChildrenData();
         }
-    }      
+    }
     
+    private void updateChildrenData()
+    {
+    	int childrenNumber = childrenTables.size();
+    	
+        if(childrenNumber == 1) 
+        {
+            firstChildTablePanel.updateData(childrenTables.get(0));
+        } 
+        else 
+        {
+            firstChildTablePanel.updateData(childrenTables.get(leftIndex));
+            secondChildTablePanel.updateData(childrenTables.get(rightIndex));
+        }
+    }
+    
+    class ScrollChildrenActionListener implements ActionListener
+    {
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			if(LEFT.equals(e.getActionCommand()))
+			{
+				leftIndex--;
+				rightIndex--;
+			}
+			else if(RIGHT.equals(e.getActionCommand()))
+			{
+				leftIndex++;
+				rightIndex++;
+			}
+			else
+			{
+				throw new RuntimeException("Unknown direction in ScrollChildrenActionListener");
+			}
+			
+			if(leftIndex < 0)
+			{
+				leftIndex = childrenTables.size()-1;
+			}
+			
+			if(rightIndex < 0)
+			{
+				rightIndex = childrenTables.size()-1;
+			}
+			
+			if(leftIndex > childrenTables.size()-1)
+			{
+				leftIndex = 0;
+			}
+			
+			if(rightIndex > childrenTables.size()-1)
+			{
+				rightIndex = 0;
+			}
+			
+			updateChildrenData();
+		}
+    }
 }

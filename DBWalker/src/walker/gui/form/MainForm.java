@@ -32,6 +32,8 @@ public class MainForm extends JFrame implements Observer{
     private WorkspaceTree workspaceTree;
 	private ChildrenTablePanel childrenTablePanel;
     private TablePanel tablePanel;
+    private JSplitPane Hspliter;
+    private double hDeviderLocation = 0.5;
     
 	public MainForm(Controller controller, TableData tableData) {
 		initMainFrame();
@@ -87,8 +89,8 @@ public class MainForm extends JFrame implements Observer{
 		HscrollChild.setMinimumSize(new Dimension(250, 250));
 		JScrollPane HscrollParrent = new JScrollPane(tablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		JSplitPane Hspliter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, HscrollParrent, HscrollChild);
-		Hspliter.setDividerLocation(260);
+		Hspliter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, HscrollParrent, HscrollChild);
+		Hspliter.setDividerLocation(hDeviderLocation);
 		Hspliter.setOneTouchExpandable(true);
 		
 		JScrollPane Vscroll = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -185,10 +187,22 @@ public class MainForm extends JFrame implements Observer{
 		{
 			AppState appState = (AppState)o;
 			
+			// ako je promenjena tabela updateuj podatke u tabelama
 			if(AppState.CURRENT_TABLE_CHANGED.equals(arg))
-			{			    
-				// TODO CURRENT_TABLE_CHANGED
-				// ako je promenjena tabela updateuj podatke u tabelama
+			{
+				// ako nema dece sakri donji panel
+				if(appState.getCurrentTable().getChildren().isEmpty())
+				{
+					// zapamti lokaciju devidera
+					hDeviderLocation = Hspliter.getDividerLocation();
+					Hspliter.setDividerLocation(1.0);
+				}
+				else
+				{
+					// vrati devider na prethodnu lokaciju
+					Hspliter.setDividerLocation(hDeviderLocation);
+				}
+				
 				tablePanel.updateData(appState.getCurrentTable());
 				childrenTablePanel.update(appState.getCurrentTable());
 			}
