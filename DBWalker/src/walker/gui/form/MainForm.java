@@ -33,6 +33,7 @@ public class MainForm extends JFrame implements Observer{
 	private ChildrenTablePanel childrenTablePanel;
     private TablePanel tablePanel;
     private JSplitPane Hspliter;
+    private JSplitPane Vspliter;
     private double hDeviderLocation = 0.5;
     
 	public MainForm(Controller controller, TableData tableData) {
@@ -168,7 +169,7 @@ public class MainForm extends JFrame implements Observer{
 		leftPanel.add(Vscroll, BorderLayout.CENTER);
 	//	leftPanel.add(jostick, BorderLayout.SOUTH);
 		
-		JSplitPane Vspliter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, Hspliter);
+		Vspliter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, Hspliter);
 		Vspliter.setDividerLocation(250);
 		Vspliter.setOneTouchExpandable(true);
 		
@@ -193,12 +194,14 @@ public class MainForm extends JFrame implements Observer{
 				// ako nema dece sakri donji panel
 				if(appState.getCurrentTable().getChildren().isEmpty())
 				{
+					Vspliter.setRightComponent(tablePanel);
+					
 					// zapamti lokaciju devidera
 					hDeviderLocation = Hspliter.getDividerLocation();
-					Hspliter.setDividerLocation(1.0);
 				}
 				else
 				{
+					Vspliter.setRightComponent(Hspliter);
 					// vrati devider na prethodnu lokaciju
 					Hspliter.setDividerLocation(hDeviderLocation);
 				}
