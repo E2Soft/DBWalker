@@ -1,7 +1,6 @@
 package walker.gui.form;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Observable;
@@ -16,6 +15,7 @@ import javax.swing.ToolTipManager;
 import walker.controller.Controller;
 import walker.gui.panel.ChildrenTablePanel;
 import walker.gui.panel.TablePanel;
+import walker.gui.toolbar.MainToolBar;
 import walker.gui.workspace.WorkspaceTree;
 import walker.main.AppState;
 import walker.table.TableData;
@@ -32,7 +32,10 @@ public class MainForm extends JFrame implements Observer{
     private TablePanel centralTablePanel;
     private JSplitPane horizontalSpliter;
     private JSplitPane verticalSpliter;
-    private double horizontalDeviderLocation = 0.5;
+    private JPanel tablesPanel;
+    private MainToolBar mainToolBar;
+    private JScrollPane centralScroll;
+    private int horizontalDeviderLocation;
     
 	public MainForm(Controller controller, TableData tableData) {
 		initMainFrame();
@@ -76,22 +79,21 @@ public class MainForm extends JFrame implements Observer{
 		JScrollPane childrenScroll = new JScrollPane(childrenTablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		childrenScroll.setMinimumSize(new Dimension(250, 250));
 		
-		JScrollPane centralScroll = new JScrollPane(centralTablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		centralScroll = new JScrollPane(centralTablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		horizontalSpliter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, centralScroll, childrenScroll);
-		horizontalSpliter.setDividerLocation(horizontalDeviderLocation);
+		horizontalSpliter.setResizeWeight(0.5);
 		horizontalSpliter.setOneTouchExpandable(true);
+		
+		mainToolBar = new MainToolBar(controller);
+		
+		tablesPanel = new JPanel(new BorderLayout());
+		tablesPanel.add(mainToolBar, BorderLayout.PAGE_START);
+		tablesPanel.add(horizontalSpliter, BorderLayout.CENTER);
 		
 		//tree
 		
-		JPanel treePanel = new JPanel();
-		treePanel.setOpaque(true);
-		treePanel.setBackground(Color.white);
-		
-		JScrollPane treeScroll = new JScrollPane(treePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		treePanel.setLayout(new BorderLayout(0, 0));
-		
-		treePanel.add(workspaceTree);//dodaj stablo na panel
+		JScrollPane treeScroll = new JScrollPane(workspaceTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		//test part
 		Project project1 = new Project("project1");
@@ -113,14 +115,14 @@ public class MainForm extends JFrame implements Observer{
 		workspaceTree.addProject(project1);
 		workspaceTree.addProject(project2);
 		
-		JPanel leftPanel = new JPanel(new BorderLayout());
-		leftPanel.setMinimumSize(new Dimension(250, 250));
+		JPanel treePanel = new JPanel(new BorderLayout());
+		treePanel.setMinimumSize(new Dimension(250, 250));
 		
-		leftPanel.add(treeScroll, BorderLayout.CENTER);
+		treePanel.add(treeScroll, BorderLayout.CENTER);
 		
 		//end tree
 		
-		verticalSpliter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, horizontalSpliter);
+		verticalSpliter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treePanel, tablesPanel);
 		verticalSpliter.setDividerLocation(0.6);
 		verticalSpliter.setOneTouchExpandable(true);
 		
@@ -142,23 +144,12 @@ public class MainForm extends JFrame implements Observer{
 			// ako je promenjena tabela updateuj podatke u tabelama
 			if(AppState.CURRENT_TABLE_CHANGED.equals(arg))
 			{
-				// ako nema dece sakri donji panel
-				if(appState.getCurrentTable().getChildren().isEmpty())
-				{
-					verticalSpliter.setRightComponent(centralTablePanel);
-					
-					// zapamti lokaciju devidera
-					horizontalDeviderLocation = horizontalSpliter.getDividerLocation();
-				}
-				else
-				{
-					verticalSpliter.setRightComponent(horizontalSpliter);
-					// vrati devider na prethodnu lokaciju
-					horizontalSpliter.setDividerLocation(horizontalDeviderLocation);
-				}
+				// ako ima dece prikazi donji panel, inace sakrij
+				showChildrenPanel(!appState.getCurrentTable().getChildren().isEmpty());
 				
 				centralTablePanel.updateData(appState.getCurrentTable());
 				childrenTablePanel.update(appState.getCurrentTable());
+				mainToolBar.update(appState.getCurrentTable());
 			}
 			else if(AppState.SCHEMA_MODEL_CHANGED.equals(arg))
 			{
@@ -168,6 +159,37 @@ public class MainForm extends JFrame implements Observer{
 				//childrenPanel.updateData(null);
 				//tree.updateData(appState.getSchemaModel());
 			}
+		}
+	}
+	
+	private void showChildrenPanel(boolean show)
+	{
+		// zapamti lokaciju devidera ako je childrenTablePanel bio vidljiv
+		if(childrenTablePanel.isVisible())
+		{
+			horizontalDeviderLocation = horizontalSpliter.getDividerLocation();
+		}
+		
+		childrenTablePanel.setVisible(show);
+		horizontalSpliter.setEnabled(show);
+		horizontalSpliter.setOneTouchExpandable(show);
+		
+		if(show)
+		{
+			if(horizontalDeviderLocation <= 0)
+			{
+				horizontalSpliter.setDividerLocation(0.5);
+				horizontalDeviderLocation = horizontalSpliter.getDividerLocation();
+			}
+			else
+			{
+				// vrati devider na prethodnu lokaciju
+				horizontalSpliter.setDividerLocation(horizontalDeviderLocation);
+			}
+		}
+		else
+		{
+			horizontalSpliter.setDividerLocation(1.0);
 		}
 	}
 }
