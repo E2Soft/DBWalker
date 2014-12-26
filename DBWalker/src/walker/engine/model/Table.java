@@ -1,6 +1,7 @@
 package walker.engine.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ public class Table extends NodeElement {
 		protected List<Table> children;
 		//protected List<Column> keys;
 		protected List<Table> tables;
-		protected List<Key> fullKeys;
+		protected Map<String,Key> fullKeys;
 		
 		public Table(String name, String code, String id) {
 			super(name, code, id);
@@ -20,7 +21,7 @@ public class Table extends NodeElement {
 			children = new ArrayList<Table>();
 			//keys = new ArrayList<Column>();
 			cols = new LinkedHashMap<String, Column>();
-			fullKeys = new ArrayList<Key>();
+			fullKeys = new HashMap<String, Key>();
 		}
 		
 		public List<Table> getChildren() {
@@ -49,7 +50,7 @@ public class Table extends NodeElement {
 			return "SELECT * FROM "+name;
 		}
 		
-		public List<Key> getFullKeys() {
+		public Map<String, Key> getFullKeys() {
 			return fullKeys;
 		}
 		

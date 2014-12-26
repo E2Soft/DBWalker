@@ -240,7 +240,7 @@ public class WalkEngine {
 											}
 										}
 										//za novu verziju
-										t.getFullKeys().add(okey);
+										t.getFullKeys().put(id, okey);
 									}
 								}
 							}
