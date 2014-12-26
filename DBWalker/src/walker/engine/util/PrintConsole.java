@@ -1,8 +1,11 @@
 package walker.engine.util;
 
+import javax.swing.JEditorPane;
+
 import walker.engine.model.Column;
-import walker.engine.model.Table;
+import walker.engine.model.Key;
 import walker.engine.model.Package;
+import walker.engine.model.Table;
 
 public class PrintConsole {
 	
@@ -33,7 +36,8 @@ public class PrintConsole {
 		}
 	}
 	
-	private static void printKeys(Table table) {
+	//STARA VERZIJA
+	/*private static void printKeys(Table table) {
 		if(table.getKeys().size() > 0){
 			System.out.println("----KEYS----"+table.getKeys().size());
 			
@@ -42,6 +46,23 @@ public class PrintConsole {
 			}
 			
 			System.out.println("------------");
+		}
+	}*/
+	
+	//NOVA VERZIJA
+	private static void printKeysFull(Table table){
+		System.out.println("\n\n");
+		if(table.getFullKeys().size() > 0){
+			System.out.println("----KEYS-FULL----"+table.getFullKeys().size());
+			
+			for(Key key : table.getFullKeys()){
+				System.out.println(key.getName()+" "+key.getCode());
+				for(Column col : key.getKeyparts()){
+					System.out.println(col.getName());
+				}
+			}
+			
+			System.out.println("------------\n\n");
 		}
 	}
 	
@@ -64,7 +85,8 @@ public class PrintConsole {
 			
 			printColumns(t);
 			
-			printKeys(t);
+			//printKeys(t);
+			printKeysFull(t);
 			
 			voidTables(t);
 			

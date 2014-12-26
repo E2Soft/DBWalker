@@ -10,15 +10,17 @@ public class Table extends NodeElement {
 		protected Map<String, Column> cols;
         protected List<Table> parrents;
 		protected List<Table> children;
-		protected List<Column> keys;
+		//protected List<Column> keys;
 		protected List<Table> tables;
+		protected List<Key> fullKeys;
 		
 		public Table(String name, String code, String id) {
 			super(name, code, id);
 			parrents = new ArrayList<Table>();
 			children = new ArrayList<Table>();
-			keys = new ArrayList<Column>();
+			//keys = new ArrayList<Column>();
 			cols = new LinkedHashMap<String, Column>();
+			fullKeys = new ArrayList<Key>();
 		}
 		
 		public List<Table> getChildren() {
@@ -33,9 +35,9 @@ public class Table extends NodeElement {
 			return cols;
 		}
 		
-		public List<Column> getKeys() {
+		/*public List<Column> getKeys() {
 			return keys;
-		}
+		}*/
 		
         @Override
 		public String toString() {
@@ -45,6 +47,10 @@ public class Table extends NodeElement {
 		public String getBasicSQLSelectStarQuery(){
 			
 			return "SELECT * FROM "+name;
+		}
+		
+		public List<Key> getFullKeys() {
+			return fullKeys;
 		}
 		
 		public String getBasicSQLSelectQuery(){

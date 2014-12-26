@@ -14,6 +14,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import walker.engine.model.Column;
+import walker.engine.model.Key;
 import walker.engine.model.Package;
 import walker.engine.model.RootElement;
 import walker.engine.model.Table;
@@ -214,28 +215,32 @@ public class WalkEngine {
 							//TODO:ovaj deo je dosta LUD, skontati da li moze bolje i brze!!!!!!!	
 							}else if(elem.getTagName().equals("c:Keys")){
 								NodeList nodelist = elem.getChildNodes();//o:Key tag
+								
 								for(int j=0;j<nodelist.getLength();j++){
 									if(nodelist.item(j) instanceof Element){
-										Element elm = (Element)nodelist.item(j);
-										NodeList keyslist = elm.getChildNodes();
-										for(int z=0;z<keyslist.getLength();z++){
-											if(keyslist.item(z) instanceof Element){
-												Element keyelm = (Element)keyslist.item(z);
-												if(keyelm.getTagName().equals("c:Key.Columns")){
-													NodeList keyNodes = keyelm.getChildNodes();
-													for(int y=0;y<keyNodes.getLength();y++){
-														if(keyNodes.item(y) instanceof Element){
-															String id = ((Element)keyNodes.item(y)).getAttribute("Ref");//getAttribute("Id") je bilo i to nije ok
-															for(String colId : t.getCols().keySet()){
-																if(id.equals(colId)){
-																	t.getKeys().add(t.getCols().get(id));
-																}
-															}
-														}
-													}
-												}
+										Element key = (Element)nodelist.item(j);//ovde sada imam svaki o:key posebno
+										String name = key.getElementsByTagName("a:Name").item(0).getTextContent();
+										String code = key.getElementsByTagName("a:Name").item(0).getTextContent();
+										String id =  key.getAttribute("Id");
+										Key okey = new Key(name, code, id);
+										
+										//dobijem kolone
+										NodeList collumns = key.getElementsByTagName("c:Key.Columns").item(0).getChildNodes();
+										for(int z=0;z<collumns.getLength();z++){
+											if(collumns.item(z) instanceof Element){
+												Element collumn = (Element)collumns.item(z);
+												String ref = collumn.getAttribute("Ref");
+												Column col = t.getCols().get(ref);
+												
+												//popunim kolonama kljuc
+												okey.getKeyparts().add(col);
+												
+												//zbog stare verzije
+												//t.getKeys().add(t.getCols().get(ref));
 											}
 										}
+										//za novu verziju
+										t.getFullKeys().add(okey);
 									}
 								}
 							}
