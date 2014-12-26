@@ -56,7 +56,7 @@ public class PrintConsole {
 			System.out.println("----KEYS-FULL----"+table.getFullKeys().size());
 			
 			for(Key key : table.getFullKeys().values()){
-				System.out.println(key.getName()+" "+key.getCode());
+				System.out.println(key.getName()+" "+key.getCode()+" PRIM:"+key.isPrimaryKey());
 				for(Column col : key.getKeyparts()){
 					System.out.println(col.getName());
 				}

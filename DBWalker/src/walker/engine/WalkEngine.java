@@ -243,6 +243,16 @@ public class WalkEngine {
 										t.getFullKeys().put(id, okey);
 									}
 								}
+								//nadjimo koji je primarni od svih kljuceva
+							}else if(elem.getTagName().equals("c:PrimaryKey")){
+								NodeList primaryKesy =  elem.getChildNodes();
+								for(int j=0;j<primaryKesy.getLength();j++){
+									if(primaryKesy.item(j) instanceof Element){
+										Element primkey = (Element)primaryKesy.item(j);
+										String ref = primkey.getAttribute("Ref");//nasao samo ref na primarni kljuc
+										t.getFullKeys().get(ref).setPrimaryKey(true);
+									}
+								}
 							}
 						}
 					}
