@@ -2,6 +2,9 @@ package walker.engine;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -95,13 +98,29 @@ public class WalkEngine {
 		
 		return null;
 	}
+	
+	private static Key findInterPackageTableKey(Package pckg, String key){
+		for(Table table : pckg.getTables().values()){
+			for(String id : table.getFullKeys().keySet()){
+				if(id.equals(key)){
+					return table.getFullKeys().get(key);
+				}
+			}
+		}
+		
+		for(Package p : pckg.getSubpacks()){
+			return findInterPackageTableKey(p, key);
+		}
+		
+		return null;
+	}
 
 	/**
 	 * Povezuje tabele a povezuje i one koje su precice
 	 * @param node cvor koji se povezuje
 	 * @param pack paket u kom se pretrazuje
 	 */
-	public static void connectTables(Node node, Package pack){
+	private static void connectTables(Node node, Package pack){
 			if(node instanceof Element){
 				Element element = (Element)node;
 				//povezivanje tabela
@@ -158,11 +177,49 @@ public class WalkEngine {
 								deteTabela.getParrents().add(roditeljTabela);
 								roditeljTabela.getChildren().add(deteTabela);
 							}
+			
+							/*//trazim povezani kljuc
+							NodeList parentKeys = elem.getElementsByTagName("c:ParentKey");
+							
+							//proveri da li u opste ima kljuceva tj da li je povezana
+							if(parentKeys.getLength() > 0){
+								Element parentKey = (Element) ((Element)parentKeys.item(0)).getChildNodes().item(1);//tag kljuca
+								Key key = null;
+								
+								if(parentKey.getTagName().equals("o:Key")){
+									String ref = parentKey.getAttribute("Ref");
+									
+									//probaj naci u tom paketu nekog od tih tabela
+									key = getKeyGromTable(pack.getTables().values(), ref);
+									
+									if(key == null){
+										//ako ne moze vidi u nekom od ostalih paketa
+										key = findInterPackageTableKey(pack, ref);
+									}
+									
+									//parent key pa bi trebalo da se dodaje u dete tabelu???
+									if(key != null){
+										deteTabela.getParentKeys().add(key);
+									}
+								}
+							}*/
 						}
 					}
+					
+					//mesto za traziti JOIN TABELE >??? mozda
 				}
 			}
 		}
+	
+	private static Key getKeyGromTable(Collection<Table> tables, String id) {
+		for (Table table : tables) {
+			if(table.getFullKeys().keySet().contains(id)){
+				return table.getFullKeys().get(id);
+			}
+		}
+		
+		return null;
+	}
 
 	/**
 	 * Parsira prosledjeni XML node i popunjava podatke o tabelama i podpaketima za prosledjeni paket
@@ -211,8 +268,7 @@ public class WalkEngine {
 										t.getCols().put(col.getId(), col);
 									}
 								}
-							//povezujemo kljuceve
-							//TODO:ovaj deo je dosta LUD, skontati da li moze bolje i brze!!!!!!!	
+							//povezujemo kljuceve	
 							}else if(elem.getTagName().equals("c:Keys")){
 								NodeList nodelist = elem.getChildNodes();//o:Key tag
 								
@@ -234,9 +290,6 @@ public class WalkEngine {
 												
 												//popunim kolonama kljuc
 												okey.getKeyparts().add(col);
-												
-												//zbog stare verzije
-												//t.getKeys().add(t.getCols().get(ref));
 											}
 										}
 										//za novu verziju
