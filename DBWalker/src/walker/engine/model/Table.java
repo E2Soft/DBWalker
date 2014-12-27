@@ -14,6 +14,7 @@ public class Table extends NodeElement {
 		protected List<Table> tables;
 		protected Map<String,Key> fullKeys;
 		protected List<Key> parentKeys;
+		protected List<Reference> references;
 		
 		public Table(String name, String code, String id) {
 			super(name, code, id);
@@ -22,6 +23,41 @@ public class Table extends NodeElement {
 			cols = new LinkedHashMap<String, Column>();
 			fullKeys = new HashMap<String, Key>();
 			parentKeys = new ArrayList<Key>();
+			references = new ArrayList<Reference>();
+		}
+		
+		public List<Table> getParentTables(){
+			List<Table> parents = new ArrayList<Table>();
+			
+			for(Reference reference : references){
+				if(!reference.getParentTable().getId().equals(getId())){
+					parents.add(reference.getParentTable());
+				}else if(reference.getParentTable().getId().equals(getId()) &&
+						reference.getChildTable().getId().equals(getId())){
+					parents.add(reference.getParentTable());
+				}
+			}
+			
+			return parents;
+		}
+		
+		public List<Table> getChildTables(){
+			List<Table> children = new ArrayList<Table>();
+			
+			for(Reference reference : references){
+				if(!reference.getChildTable().getId().equals(getId())){
+					children.add(reference.getChildTable());
+				}else if(reference.getParentTable().getId().equals(getId()) && 
+						reference.getChildTable().getId().equals(getId())){
+					children.add(reference.getChildTable());
+				}
+			}
+			
+			return children;
+		}
+		
+		public List<Reference> getReferences() {
+			return references;
 		}
 		
 		public List<Table> getChildren() {

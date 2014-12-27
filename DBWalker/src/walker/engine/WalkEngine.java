@@ -3,7 +3,6 @@ package walker.engine;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,6 +18,7 @@ import org.xml.sax.SAXException;
 import walker.engine.model.Column;
 import walker.engine.model.Key;
 import walker.engine.model.Package;
+import walker.engine.model.Reference;
 import walker.engine.model.RootElement;
 import walker.engine.model.Table;
 
@@ -177,14 +177,16 @@ public class WalkEngine {
 								deteTabela.getParrents().add(roditeljTabela);
 								roditeljTabela.getChildren().add(deteTabela);
 							}
-			
-							/*//trazim povezani kljuc
+							
+							//EKSPERIMENTALNI DEO
+							
+							//trazim povezani kljuc
 							NodeList parentKeys = elem.getElementsByTagName("c:ParentKey");
+							Key key = null;
 							
 							//proveri da li u opste ima kljuceva tj da li je povezana
 							if(parentKeys.getLength() > 0){
 								Element parentKey = (Element) ((Element)parentKeys.item(0)).getChildNodes().item(1);//tag kljuca
-								Key key = null;
 								
 								if(parentKey.getTagName().equals("o:Key")){
 									String ref = parentKey.getAttribute("Ref");
@@ -202,14 +204,43 @@ public class WalkEngine {
 										deteTabela.getParentKeys().add(key);
 									}
 								}
-							}*/
+							}
+							
+							//probati napraviti referencu sa svim potrebnim stvarima
+							String name = elem.getElementsByTagName("a:Name").item(0).getTextContent(); 
+							String code = elem.getElementsByTagName("a:Code").item(0).getTextContent();
+							String id = elem.getAttribute("Id");
+							
+							Reference reference = new Reference(name, code, id);
+							reference.setParentTable(roditeljTabela);
+							reference.setChildTable(deteTabela);
+							reference.setParentKey(key);
+							
+							if(!containReference(roditeljTabela.getReferences(), id)){
+								roditeljTabela.getReferences().add(reference);//dodaj referencu roditelju
+							}
+							if(!containReference(deteTabela.getReferences(), id)){
+								deteTabela.getReferences().add(reference);//dodaj detetu tabeli
+							}
+							
+							
+							//EKSPERIMENTALNI DEO
 						}
 					}
-					
-					//mesto za traziti JOIN TABELE >??? mozda
 				}
 			}
 		}
+	
+	private static boolean containReference(List<Reference> references, String id) {
+		
+		for (Reference reference : references) {
+			if(reference.getId().equals(id)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	private static Key getKeyGromTable(Collection<Table> tables, String id) {
 		for (Table table : tables) {
