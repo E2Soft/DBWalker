@@ -6,6 +6,7 @@ import walker.engine.model.Column;
 import walker.engine.model.Key;
 import walker.engine.model.Package;
 import walker.engine.model.Reference;
+import walker.engine.model.ReferenceJoin;
 import walker.engine.model.Table;
 
 public class PrintConsole {
@@ -74,7 +75,8 @@ public class PrintConsole {
 			
 			printKeysFull(t);
 			
-			voidTables(t);
+			//voidTables(t);
+			printTables(t);
 			
 			printBasicSQL(t);
 		}
@@ -86,6 +88,7 @@ public class PrintConsole {
 		System.out.println("/-------------------------------------------/");
 	}
 	
+	//NOVA VERZIJA
 	private static void printTables(Table table){
 		System.out.println("****VEZE****");
 		
@@ -144,7 +147,13 @@ public class PrintConsole {
 			System.out.println("TABLE:"+t.getName());
 			System.out.println("REFS:");
 			for(Reference r : t.getReferences()){
+				System.out.println("NAME:"+r.getName());
 				System.out.println("PARENT:"+r.getParentTable().getName()+" CHILD:"+r.getChildTable().getName()+" ID:"+r.getId());
+				
+				System.out.println("JOINS:");
+				for(ReferenceJoin join : r.getJoins()){
+					System.out.println("ID:"+join.getId()+" OBJECT:"+join.getObject1().getId()+" OBJECT2:"+join.getObject2().getId());
+				}
 			}
 			System.out.println();
 		}

@@ -4,14 +4,13 @@ public class ReferenceJoin {
 	
 	protected Column object1;
 	protected Column object2;
+	protected String id;
 	
-	public ReferenceJoin() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public ReferenceJoin(Column object1, Column object2) {
+	public ReferenceJoin(Column object1, Column object2, String id) {
+		super();
 		this.object1 = object1;
 		this.object2 = object2;
+		this.id = id;
 	}
 
 	public Column getObject1() {
@@ -28,6 +27,14 @@ public class ReferenceJoin {
 
 	public void setObject2(Column object2) {
 		this.object2 = object2;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 }

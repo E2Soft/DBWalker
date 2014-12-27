@@ -17,8 +17,8 @@ public class Test {
 			
 			Package pac = WalkEngine.getPackage("C:\\Users\\Milos\\Desktop\\testXML.xml");
 			//PrintConsole.print(pac);
-			PrintConsole.printAgainst(pac);
-			//PrintConsole.name(pac);
+			//PrintConsole.printAgainst(pac);
+			PrintConsole.name(pac);
 			
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block

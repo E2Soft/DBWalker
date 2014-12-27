@@ -19,6 +19,7 @@ import walker.engine.model.Column;
 import walker.engine.model.Key;
 import walker.engine.model.Package;
 import walker.engine.model.Reference;
+import walker.engine.model.ReferenceJoin;
 import walker.engine.model.RootElement;
 import walker.engine.model.Table;
 
@@ -110,6 +111,22 @@ public class WalkEngine {
 		
 		for(Package p : pckg.getSubpacks()){
 			return findInterPackageTableKey(p, key);
+		}
+		
+		return null;
+	}
+	
+	private static Column findInterPackageTableColumn(Package pckg, String key){
+		for(Table table : pckg.getTables().values()){
+			for(String id : table.getCols().keySet()){
+				if(id.equals(key)){
+					return table.getCols().get(key);
+				}
+			}
+		}
+		
+		for(Package p : pckg.getSubpacks()){
+			return findInterPackageTableColumn(p, key);
 		}
 		
 		return null;
@@ -206,23 +223,62 @@ public class WalkEngine {
 								}
 							}
 							
-							//probati napraviti referencu sa svim potrebnim stvarima
-							String name = elem.getElementsByTagName("a:Name").item(0).getTextContent(); 
-							String code = elem.getElementsByTagName("a:Code").item(0).getTextContent();
-							String id = elem.getAttribute("Id");
-							
-							Reference reference = new Reference(name, code, id);
-							reference.setParentTable(roditeljTabela);
-							reference.setChildTable(deteTabela);
-							reference.setParentKey(key);
-							
-							if(!containReference(roditeljTabela.getReferences(), id)){
-								roditeljTabela.getReferences().add(reference);//dodaj referencu roditelju
+							if(deteTabela != null && roditeljTabela != null){
+								//probati napraviti referencu sa svim potrebnim stvarima
+								String name = elem.getElementsByTagName("a:Name").item(0).getTextContent(); 
+								String code = elem.getElementsByTagName("a:Code").item(0).getTextContent();
+								String id = elem.getAttribute("Id");
+								
+								Reference reference = new Reference(name, code, id);
+								reference.setParentTable(roditeljTabela);
+								reference.setChildTable(deteTabela);
+								reference.setParentKey(key);
+								
+								//nadji kolone
+								NodeList jonTag = elem.getElementsByTagName("c:Joins");
+								if(jonTag != null && jonTag.getLength() > 0){
+									NodeList referenceJoins = jonTag.item(0).getChildNodes();
+									for(int j=0;j<referenceJoins.getLength();j++){
+										if(referenceJoins.item(j) instanceof Element){
+											Element referenceJoin = (Element)referenceJoins.item(j);//o:ReferenceJoin
+											String refjoinid = referenceJoin.getAttribute("Id");
+											
+											NodeList ocolumn = referenceJoin.getElementsByTagName("o:Column");
+											String object1Ref = ((Element)ocolumn.item(0)).getAttribute("Ref");
+											String object2Ref = ((Element)ocolumn.item(1)).getAttribute("Ref");
+											
+											Column object1 = null;
+											Column object2 = null;
+											
+											if(roditeljTabela.getCols().containsKey(object1Ref)){
+												object1 = roditeljTabela.getCols().get(object1Ref);
+											}else{
+												object1 = findInterPackageTableColumn(pack, object1Ref);
+											}
+											
+											if(deteTabela.getCols().containsKey(object2Ref)){
+												object2 = deteTabela.getCols().get(object2Ref);
+											}else{
+												object2 = findInterPackageTableColumn(pack, object2Ref);
+											}
+											
+											if(object1 != null && object2 != null){
+												ReferenceJoin refJoinobj = new ReferenceJoin(object1, object2, refjoinid);
+												reference.getJoins().add(refJoinobj);
+											}
+											
+										}
+									}
+								}
+								
+								
+								if(!containReference(roditeljTabela.getReferences(), id)){
+									roditeljTabela.getReferences().add(reference);//dodaj referencu roditelju
+								}
+								if(!containReference(deteTabela.getReferences(), id)){
+									deteTabela.getReferences().add(reference);//dodaj detetu tabeli
+								}
 							}
-							if(!containReference(deteTabela.getReferences(), id)){
-								deteTabela.getReferences().add(reference);//dodaj detetu tabeli
-							}
-							
 							
 							//EKSPERIMENTALNI DEO
 						}
