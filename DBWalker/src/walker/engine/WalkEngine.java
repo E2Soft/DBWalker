@@ -100,6 +100,12 @@ public class WalkEngine {
 		return null;
 	}
 	
+	/**
+	 * Pronalazi kljuc u tabelama smestenim u razlicitim paketima
+	 * @param pckg paket koji se pretrazuje
+	 * @param key id kljuca koji se trazi
+	 * @return kljuc ako postoji ili null ako nije nadjen
+	 */
 	private static Key findInterPackageTableKey(Package pckg, String key){
 		for(Table table : pckg.getTables().values()){
 			for(String id : table.getFullKeys().keySet()){
@@ -116,6 +122,12 @@ public class WalkEngine {
 		return null;
 	}
 	
+	/**
+	 * Pronalazi  kolone u tabelama u razlicitima paketima
+	 * @param pckg paket koji se pretrazuje
+	 * @param key kljucna koji se trazi tj id colone koja se trazi
+	 * @return Kolona ako postoji ili null ako nije nadjena
+	 */
 	private static Column findInterPackageTableColumn(Package pckg, String key){
 		for(Table table : pckg.getTables().values()){
 			for(String id : table.getCols().keySet()){
@@ -153,14 +165,12 @@ public class WalkEngine {
 							NodeList deca = elem.getElementsByTagName("c:ChildTable");
 							Element elementDete = (Element) ((Element)deca.item(0)).getChildNodes().item(1);//tag dete
 
-							
 							Table roditeljTabela = null;
 							Table deteTabela = null;
 							
 							//posto postoje dve vrste povezivanja skonati koja je
 							if(elementRoditelj.getTagName().equals("o:Table")){
 								String key = elementRoditelj.getAttribute("Ref");
-								
 								roditeljTabela = pack.getTables().get(key);
 								
 								//ako nisi uspeo naci u tom paketu probaj u povezanim paketima
@@ -170,13 +180,11 @@ public class WalkEngine {
 							}else{
 								String key = elementRoditelj.getAttribute("Ref");
 								String name = testSchs(pack, key);
-								
 								roditeljTabela = test(pack, name);
 							}
 							
 							if(elementDete.getTagName().equals("o:Table")){
 								String key = elementDete.getAttribute("Ref");
-								
 								deteTabela = pack.getTables().get(key);
 								
 								//ako nije nasao u tom paketu probaj u medjupaketima
@@ -186,16 +194,14 @@ public class WalkEngine {
 							}else{
 								String key = elementDete.getAttribute("Ref");
 								String name = testSchs(pack, key);
-								
 								deteTabela = test(pack, name);
 							}
 
-							if(deteTabela != null && roditeljTabela != null){
+							//u novoj verziji ne treba
+							/*if(deteTabela != null && roditeljTabela != null){
 								deteTabela.getParrents().add(roditeljTabela);
 								roditeljTabela.getChildren().add(deteTabela);
-							}
-							
-							//EKSPERIMENTALNI DEO
+							}*/
 							
 							//trazim povezani kljuc
 							NodeList parentKeys = elem.getElementsByTagName("c:ParentKey");
@@ -223,6 +229,7 @@ public class WalkEngine {
 								}
 							}
 							
+							//EKSPERIMENTALNI DEO
 							if(deteTabela != null && roditeljTabela != null){
 								//probati napraviti referencu sa svim potrebnim stvarima
 								String name = elem.getElementsByTagName("a:Name").item(0).getTextContent(); 
@@ -279,7 +286,6 @@ public class WalkEngine {
 									deteTabela.getReferences().add(reference);//dodaj detetu tabeli
 								}
 							}
-							
 							//EKSPERIMENTALNI DEO
 						}
 					}
@@ -287,6 +293,12 @@ public class WalkEngine {
 			}
 		}
 	
+	/**
+	 * Proverava da li se referenca nalazi u listi referenci
+	 * @param references lista refernci koja se pretrazuje
+	 * @param id id reference koja se trazi
+	 * @return true ako je nadjena ili false ako nije nadjena
+	 */
 	private static boolean containReference(List<Reference> references, String id) {
 		
 		for (Reference reference : references) {
@@ -298,6 +310,12 @@ public class WalkEngine {
 		return false;
 	}
 	
+	/**
+	 * Pronalazi kljuc u prosledjenoj kolekciji
+	 * @param tables kolekcija tabela u kojoj se trazi kljuc
+	 * @param id id kljuca koji se trazi
+	 * @return pronadjen kljuc ili null ako nije nadjen
+	 */
 	private static Key getKeyGromTable(Collection<Table> tables, String id) {
 		for (Table table : tables) {
 			if(table.getFullKeys().keySet().contains(id)){

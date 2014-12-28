@@ -145,8 +145,8 @@ public class PrintConsole {
 			System.out.println("TABLE:"+t.getName());
 			System.out.println("REFS:");
 			for(Reference r : t.getReferences()){
-				System.out.println("NAME:"+r.getName());
-				System.out.println("PARENT:"+r.getParentTable().getName()+" CHILD:"+r.getChildTable().getName()+" ID:"+r.getId());
+				System.out.println("NAME:"+r.getName()+" ID:"+r.getId());
+				System.out.println("PARENT:"+r.getParentTable().getName()+" CHILD:"+r.getChildTable().getName());
 				
 				System.out.println("JOINS:");
 				for(ReferenceJoin join : r.getJoins()){
