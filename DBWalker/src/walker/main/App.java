@@ -27,9 +27,4 @@ public class App
 	{
 		return appState;
 	}
-	
-	public void run()
-	{
-		mainForm.setVisible(true);
-	}
 }

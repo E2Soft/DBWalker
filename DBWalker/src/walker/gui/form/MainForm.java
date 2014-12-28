@@ -134,6 +134,7 @@ public class MainForm extends JFrame implements Observer{
 	
 	private void positionAndShow(){
 		setLocationRelativeTo(null);
+		showChildrenPanel(false);
 		setVisible(true);
 	}
 
@@ -156,6 +157,7 @@ public class MainForm extends JFrame implements Observer{
 			}
 			else if(AppState.SCHEMA_MODEL_CHANGED.equals(arg))
 			{
+				showChildrenPanel(false);
 				// TODO SCHEMA_MODEL_CHANGED
 				// ako je promenjena sema obrisi podatke iz tabela i updateuj stablo
 				//parentPanel.updateData(null);

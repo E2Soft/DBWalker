@@ -23,7 +23,5 @@ public class MainInMemory
 		tableData.generateDataForPackage(app.getAppState().getSchemaModel(), 5);
 		
 		app.getAppState().setCurrentTable(app.getAppState().getSchemaModel().getTables().values().iterator().next());
-		
-		app.run();
 	}
 }

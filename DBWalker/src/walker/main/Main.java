@@ -12,6 +12,5 @@ public class Main
 	{
 		App app = new App(new TableDataDB());
 		app.getAppState().setCurrentTable(app.getAppState().getSchemaModel().getTables().values().iterator().next()); // izbaciti kad se bude moglo selektovati iz stabla
-		app.run();
 	}
 }
