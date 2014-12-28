@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import walker.data.model.RowData;
 import walker.engine.model.Table;
 
 public class TableDataInMemory implements TableData
@@ -19,7 +20,7 @@ public class TableDataInMemory implements TableData
 	}
 
 	@Override
-	public List<List<String>> getTableData(Table table) throws SQLException
+	public List<List<String>> getTableData(Table table, RowData foreignKey) throws SQLException
 	{
 		return dataStore.get(table.getCode());
 	}

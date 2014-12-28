@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,6 +15,9 @@ import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
 
 import walker.controller.Controller;
+import walker.data.model.RowData;
+import walker.engine.model.Reference;
+import walker.engine.model.ReferenceJoin;
 import walker.engine.model.Table;
 import walker.table.TableData;
 
@@ -32,11 +37,13 @@ public class ChildrenTablePanel extends JPanel
 	private JSplitPane splitPane;
 	private int deviderLocation;
 	private List<Table> childrenTables;
+	Map<String, RowData> foreignKeys;
 	private int leftIndex = 0;
 	private int rightIndex = 1;
 
 	public ChildrenTablePanel(Controller controller, TableData tableData)
 	{
+		foreignKeys = new HashMap<>();
 		initComponents(controller, tableData);
 	}
 
@@ -75,9 +82,10 @@ public class ChildrenTablePanel extends JPanel
 		add(panel, BorderLayout.CENTER);
 	}
 
-	public void update(Table table)
+	public void update(Table table, RowData selectedRowData)
 	{
 		childrenTables = table.getChildren();
+		updateForeignKeys(table, selectedRowData);
 
 		int childrenNumber = childrenTables.size();
 
@@ -100,18 +108,55 @@ public class ChildrenTablePanel extends JPanel
 		}
 	}
 
+	private void updateForeignKeys(Table parent, RowData selectedRowData)
+	{
+		if(selectedRowData == null)
+		{
+			foreignKeys.clear();
+			return;
+		}
+		
+		// za svu decu
+		for(Table child : childrenTables)
+		{
+			// imena kolona i vrednosti stranog kljuca deteta
+			RowData foreignKey = new RowData();
+			
+			// nadji referencu ka ovom roditelju
+			for(Reference reference : child.getReferences())
+			{
+				if(reference.getParentTable().getCode().equals(parent.getCode()))
+				{
+					// za sve spojeve iz reference
+					for(ReferenceJoin join : reference.getJoins())
+					{
+						// podaci sa imenom kolone deteta i vrednosti iz selektovanog reda u parentu iz odgovarajuce kolone
+						foreignKey.put(join.getChildColumn().getCode(), selectedRowData.get(join.getParentColumn().getCode()));
+					}
+					
+					break;
+				}
+			}
+			
+			foreignKeys.put(child.getCode(), foreignKey);
+		}
+	}
+
 	private void updateChildrenData()
 	{
 		int childrenNumber = childrenTables.size();
 
 		if (childrenNumber == 1)
 		{
-			firstChildTablePanel.updateData(childrenTables.get(0));
+			Table table = childrenTables.get(0);
+			firstChildTablePanel.updateData(table, foreignKeys.get(table.getCode()));
 		}
 		else
 		{
-			firstChildTablePanel.updateData(childrenTables.get(leftIndex));
-			secondChildTablePanel.updateData(childrenTables.get(rightIndex));
+			Table firstTable = childrenTables.get(leftIndex);
+			Table secondTable = childrenTables.get(rightIndex);
+			firstChildTablePanel.updateData(firstTable, foreignKeys.get(firstTable.getCode()));
+			secondChildTablePanel.updateData(secondTable, foreignKeys.get(secondTable.getCode()));
 		}
 	}
 	

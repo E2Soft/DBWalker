@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ToolTipManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import walker.controller.Controller;
 import walker.gui.panel.ChildrenTablePanel;
@@ -75,6 +77,7 @@ public class MainForm extends JFrame implements Observer{
 		
 		childrenTablePanel = new ChildrenTablePanel(controller, tableData);
 		centralTablePanel = new TablePanel(tableData);
+		centralTablePanel.addListSelectionListener(new SelectRowActionListener());
 		
 		JScrollPane childrenScroll = new JScrollPane(childrenTablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		childrenScroll.setMinimumSize(new Dimension(250, 250));
@@ -147,8 +150,8 @@ public class MainForm extends JFrame implements Observer{
 				// ako ima dece prikazi donji panel, inace sakrij
 				showChildrenPanel(!appState.getCurrentTable().getChildren().isEmpty());
 				
-				centralTablePanel.updateData(appState.getCurrentTable());
-				childrenTablePanel.update(appState.getCurrentTable());
+				centralTablePanel.updateData(appState.getCurrentTable(), null);
+				childrenTablePanel.update(appState.getCurrentTable(), null);
 				mainToolBar.update(appState.getCurrentTable());
 			}
 			else if(AppState.SCHEMA_MODEL_CHANGED.equals(arg))
@@ -190,6 +193,21 @@ public class MainForm extends JFrame implements Observer{
 		else
 		{
 			horizontalSpliter.setDividerLocation(1.0);
+		}
+	}
+	
+	class SelectRowActionListener implements ListSelectionListener
+	{
+		@Override
+		public void valueChanged(ListSelectionEvent selectionEvent)
+		{
+			// ignorisi duplo pozivanje
+			if(selectionEvent.getValueIsAdjusting())
+			{
+				return;
+			}
+			
+			childrenTablePanel.update(centralTablePanel.getCurrentTable(), centralTablePanel.getSelectedRowData());
 		}
 	}
 }

@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import walker.controller.Controller;
+import walker.data.model.RowData;
 import walker.engine.model.Table;
 import walker.table.TableData;
 
@@ -36,8 +37,8 @@ public class ChildTablePanel extends JPanel{
         upBtn.addActionListener(controller.getChooseTableAction());
     }
 
-    public void updateData(Table table){
+    public void updateData(Table table, RowData foreignKey){
         upBtn.setActionCommand(table.getCode());
-        tablePanel.updateData(table);      
+        tablePanel.updateData(table, foreignKey);      
     }
 }
