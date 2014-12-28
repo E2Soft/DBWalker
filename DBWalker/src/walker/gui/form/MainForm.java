@@ -80,7 +80,7 @@ public class MainForm extends JFrame implements Observer{
 		centralTablePanel.addListSelectionListener(new SelectRowActionListener());
 		
 		JScrollPane childrenScroll = new JScrollPane(childrenTablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		childrenScroll.setMinimumSize(new Dimension(250, 250));
+		childrenScroll.setMinimumSize(new Dimension(0, 0));
 		
 		centralScroll = new JScrollPane(centralTablePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
@@ -179,6 +179,8 @@ public class MainForm extends JFrame implements Observer{
 		
 		if(show)
 		{
+			horizontalSpliter.setResizeWeight(0.5);
+			
 			if(horizontalDeviderLocation <= 0)
 			{
 				horizontalSpliter.setDividerLocation(0.5);
@@ -192,6 +194,7 @@ public class MainForm extends JFrame implements Observer{
 		}
 		else
 		{
+			horizontalSpliter.setResizeWeight(1.0);
 			horizontalSpliter.setDividerLocation(1.0);
 		}
 	}
