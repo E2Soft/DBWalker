@@ -9,8 +9,8 @@ import java.util.Map;
 public class Table extends NodeElement {
 	    //name - key code value in db
 		protected Map<String, Column> cols;
-        protected List<Table> parrents;
-		protected List<Table> children;
+        //protected List<Table> parrents;
+		//protected List<Table> children;
 		protected List<Table> tables;
 		protected Map<String,Key> fullKeys;
 		protected List<Key> parentKeys;
@@ -18,8 +18,8 @@ public class Table extends NodeElement {
 		
 		public Table(String name, String code, String id) {
 			super(name, code, id);
-			parrents = new ArrayList<Table>();
-			children = new ArrayList<Table>();
+			//parrents = new ArrayList<Table>();
+			//children = new ArrayList<Table>();
 			cols = new LinkedHashMap<String, Column>();
 			fullKeys = new HashMap<String, Key>();
 			parentKeys = new ArrayList<Key>();
@@ -61,11 +61,13 @@ public class Table extends NodeElement {
 		}
 		
 		public List<Table> getChildren() {
-			return children;
+			//return children;
+			return getChildTables();
 		}
 		
 		public List<Table> getParrents() {
-			return parrents;
+			//return parrents;
+			return getParentTables();
 		}
 		
 		public Map<String, Column> getCols() {
@@ -127,5 +129,39 @@ public class Table extends NodeElement {
         public String getBasicSQLSelect(){
 			return "SELECT * FROM "+name;
 		}
+        
+        /**
+         * Vraca sve reference tabele koje su roditelji.Pri tome kada se vrati referenca
+         * u sebi ima informaciju ko je roditelj ko dete, kljuc itd
+         * @return lista roditelj-veza
+         */
+        public List<Reference> getAllParentReferences(){
+        	List<Reference> parentReferences = new ArrayList<Reference>();
+        	
+        	for(Reference reference : references){
+        		if(reference.getParentTable().getId().equals(getId())){
+        			parentReferences.add(reference);
+        		}
+        	}
+        	
+        	return parentReferences;
+        }
+        
+        /**
+         * Vraca sve reference tabele koje su deca.Pri tome kada se vrati referenca
+         * u sebi ima informaciju ko je roditelj ko dete, kljuc itd
+         * @return lista deca-veza
+         */
+        public List<Reference> getAllChildReferences(){
+        	List<Reference> childReferences = new ArrayList<Reference>();
+        	
+        	for(Reference reference : references){
+        		if(reference.getChildTable().getId().equals(getId())){
+        			childReferences.add(reference);
+        		}
+        	}
+        	
+        	return childReferences;
+        }
         
 }
