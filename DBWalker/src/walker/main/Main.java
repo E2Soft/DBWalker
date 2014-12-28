@@ -40,9 +40,15 @@ public class Main {
 		Table child4 = new Table("child4", "child4", "c4");
 		
 		parent.getChildren().add(child1);
+		child1.getParrents().add(parent);
 		parent.getChildren().add(child2);
+		child2.getParrents().add(parent);
 		parent.getChildren().add(child3);
+		child3.getParrents().add(parent);
 		child3.getChildren().add(child4);
+		child4.getParrents().add(child3);
+		
+		
 		
 		parent.getCols().put("parent_col1", new Column("parent_col1", "parent_col1", "parent_col1"));
         parent.getCols().put("parent_col2", new Column("parent_col2", "parent_col2", "parent_col2"));

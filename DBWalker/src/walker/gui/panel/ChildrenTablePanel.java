@@ -30,6 +30,7 @@ public class ChildrenTablePanel extends JPanel
 	private ChildTablePanel firstChildTablePanel;
 	private ChildTablePanel secondChildTablePanel;
 	private JSplitPane splitPane;
+	private int deviderLocation;
 	private List<Table> childrenTables;
 	private int leftIndex = 0;
 	private int rightIndex = 1;
@@ -60,51 +61,42 @@ public class ChildrenTablePanel extends JPanel
 		shiftRightBtn.setActionCommand(RIGHT);
 		add(shiftRightBtn, BorderLayout.EAST);
 
-		panel = new JPanel();
-		panel.setLayout(new BorderLayout(0, 0));
+		panel = new JPanel(new BorderLayout());
 		firstChildTablePanel = new ChildTablePanel(controller, tableData);
 		secondChildTablePanel = new ChildTablePanel(controller, tableData);
-
-		splitPane = new JSplitPane();
+		
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, firstChildTablePanel, secondChildTablePanel);
+		splitPane.setResizeWeight(0.5);
+		splitPane.setOneTouchExpandable(true);
 		splitPane.setPreferredSize(new Dimension(10, 10));
 		splitPane.setBorder(null);
-		splitPane.setDividerLocation(340);
-		splitPane.setLeftComponent(firstChildTablePanel);
-		splitPane.setRightComponent(secondChildTablePanel);
 
-		panel.add(splitPane);
+		panel.add(splitPane, BorderLayout.CENTER);
 		add(panel, BorderLayout.CENTER);
 	}
 
 	public void update(Table table)
 	{
-
 		childrenTables = table.getChildren();
 
 		int childrenNumber = childrenTables.size();
 
 		if (childrenNumber != 0)
 		{
-			if (childrenNumber == 1)
-			{
-				panel.remove(splitPane);
-				panel.add(firstChildTablePanel);
-			}
-			else
-			{
-				panel.remove(firstChildTablePanel);
-				panel.add(splitPane);
-			}
+			shiftLeftBtn.setVisible(childrenNumber > 2);
+			shiftRightBtn.setVisible(childrenNumber > 2);
+			
+			splitPane.updateUI();
+			splitPane.doLayout();
 
-			if (childrenNumber < 3)
-			{
-				shiftLeftBtn.setVisible(false);
-				shiftRightBtn.setVisible(false);
-			}
-
+			showBothPanels(childrenNumber >= 2);
+			
 			leftIndex = 0;
 			rightIndex = 1;
 			updateChildrenData();
+			
+			revalidate();
+			repaint();
 		}
 	}
 
@@ -115,11 +107,42 @@ public class ChildrenTablePanel extends JPanel
 		if (childrenNumber == 1)
 		{
 			firstChildTablePanel.updateData(childrenTables.get(0));
-		} 
+		}
 		else
 		{
 			firstChildTablePanel.updateData(childrenTables.get(leftIndex));
 			secondChildTablePanel.updateData(childrenTables.get(rightIndex));
+		}
+	}
+	
+	private void showBothPanels(boolean show)
+	{
+		// zapamti lokaciju devidera ako je secondChildTablePanel bio vidljiv
+		if(secondChildTablePanel.isVisible())
+		{
+			deviderLocation = splitPane.getDividerLocation();
+		}
+		
+		secondChildTablePanel.setVisible(show);
+		splitPane.setEnabled(show);
+		splitPane.setOneTouchExpandable(show);
+		
+		if(show)
+		{
+			if(deviderLocation <= 0)
+			{
+				splitPane.setDividerLocation(0.5);
+				deviderLocation = splitPane.getDividerLocation();
+			}
+			else
+			{
+				// vrati devider na prethodnu lokaciju
+				splitPane.setDividerLocation(deviderLocation);
+			}
+		}
+		else
+		{
+			splitPane.setDividerLocation(1.0);
 		}
 	}
 
