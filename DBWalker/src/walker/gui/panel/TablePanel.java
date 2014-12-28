@@ -1,54 +1,65 @@
 package walker.gui.panel;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import walker.engine.model.Table;
 import walker.table.GenericTableModel;
 import walker.table.TableData;
 
-import java.awt.BorderLayout;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 public class TablePanel extends JPanel{
     private static final long serialVersionUID = 1L;
     
-    private JTable table;
+    private JTable panelTable;
     private GenericTableModel genericTableModel;
     private TableData tableData;
-    private List<List<String>> data;
     private List<String> columns;
-    
-    public TablePanel() {
-        tableData = new TableData();
-        data = new ArrayList<List<String>>();
+    private DefaultTableCellRenderer centerRenderer;
 
-        initComponents();
+    public TablePanel(TableData tableData) {
+        this.tableData = tableData;
+        columns = new ArrayList<String>();
+        initComponents();      
     }
     
     public void initComponents(){
         setLayout(new BorderLayout(0, 0));
         
         JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setPreferredSize(new Dimension(0, 0));
         add(scrollPane);
+        panelTable = new JTable();
+        panelTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        panelTable.setDefaultRenderer(Object.class, centerRenderer);
+        scrollPane.setViewportView(panelTable);
+    }
         
-        Table t = new Table("A","A","o19");
-        String name = t.getName();
-        String id = t.getId();
-        //columns = t.getColumns(id); prijavljuje error
+    public void updateData(Table table){
+        
+        columns = table.getColumns();
+        List<List<String>> data = null;
 
         try {
-            data = tableData.getTableData(name);
+            data = tableData.getTableData(table);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         
-        genericTableModel = new GenericTableModel(columns, data);       
-        table = new JTable(genericTableModel);
-        scrollPane.setViewportView(table);
+        genericTableModel = new GenericTableModel(columns, data);
+        panelTable.setModel(genericTableModel);
+        
     }
-
+    
 }

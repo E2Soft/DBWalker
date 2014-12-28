@@ -1,5 +1,7 @@
 package walker.main;
 
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -19,6 +21,11 @@ public class AppState extends Observable
 	private Map<String, Table> allTables;
 	private List<KeyData> selectedKeyData;
 	
+	public AppState()
+	{
+		allTables = new HashMap<>();
+	}
+		
 	public Table getCurrentTable()
 	{
 		return currentTable;
@@ -59,7 +66,7 @@ public class AppState extends Observable
 		
 		for(Table table : pack.getTables().values())
 		{
-			allTables.put(table.getCode(), table);
+			allTables.put(table.getCode(), table);			
 		}
 	}
 
