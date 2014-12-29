@@ -2,7 +2,7 @@ package walker.tree.model.workspace;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-
+import walker.engine.model.Package;
 import javax.swing.tree.TreeNode;
 
 /**
@@ -47,7 +47,7 @@ public class Project implements TreeNode{
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		return paketi.get(childIndex);
+		return (TreeNode) paketi.get(childIndex);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class Project implements TreeNode{
 
 	@Override
 	public int getIndex(TreeNode node) {
-		return paketi.indexOf(node);
+		return paketi.indexOf((Package)node);
 	}
 
 	@Override
@@ -72,6 +72,11 @@ public class Project implements TreeNode{
 
 	public void setName(String name) {
 		nazivProjekta = name;
+	}
+
+
+	public ArrayList<Package> getPaketi() {
+		return paketi;
 	}
 
 }

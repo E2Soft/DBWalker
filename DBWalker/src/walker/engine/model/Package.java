@@ -13,6 +13,7 @@ public class Package extends NodeElement{
 	
 	public Package(String name, String code, String id) {
 		super(name, code, id);
+		
 		tables = new HashMap<String, Table>();
 		subpacks = new ArrayList<Package>();
 		shortcuts = new HashMap<String, String>();
@@ -29,5 +30,16 @@ public class Package extends NodeElement{
 	public Map<String, String> getShortcuts() {
 		return shortcuts;
 	}
+	
+	public void addSubPackage(Package p){
+		subpacks.add(p);
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	
 	
 }

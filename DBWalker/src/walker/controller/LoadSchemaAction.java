@@ -22,12 +22,17 @@ import walker.engine.model.Package;
 public class LoadSchemaAction implements ActionListener
 {
 	private AppState appState;
+	private File selektovaniFajl;//TODO ovo izbaci visak je :D !
 
 	public LoadSchemaAction(AppState appState)
 	{
 		this.appState = appState;
 	}
 
+	public File getSelectedXmlFile(){
+		return selektovaniFajl;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -39,16 +44,16 @@ public class LoadSchemaAction implements ActionListener
 
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 		{
-			File file = fileChooser.getSelectedFile();
+			selektovaniFajl = fileChooser.getSelectedFile();
 			
-			if(!file.canRead())
+			if(!selektovaniFajl.canRead())
 			{
 				JOptionPane.showMessageDialog(null, "File is not readable.", "File error", JOptionPane.ERROR_MESSAGE);
 			}
 			
 			try
 			{
-				Package schemaModel = WalkEngine.getPackage(file.getPath());
+				Package schemaModel = WalkEngine.getPackage(selektovaniFajl.getPath());
 				
 				appState.setSchemaModel(schemaModel);
 			}

@@ -4,16 +4,25 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import walker.controller.Controller;
+import walker.engine.WalkEngine;
+import walker.engine.model.Package;
 import walker.gui.panel.ChildrenTablePanel;
 import walker.gui.panel.TablePanel;
 import walker.gui.workspace.WorkspaceTree;
@@ -93,25 +102,32 @@ public class MainForm extends JFrame implements Observer{
 		
 		treePanel.add(workspaceTree);//dodaj stablo na panel
 		
+		
 		//test part
 		Project project1 = new Project("project1");
-		Project project2 = new Project("project2");
+		Package p = null;
+		File selectedFile = null;
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		int result = fileChooser.showOpenDialog(this);
+		if(result == JFileChooser.APPROVE_OPTION){
+			selectedFile = fileChooser.getSelectedFile();
+		}
+			
+			
+		try {
+			//p = WalkEngine.getPackage(controller.getLoadSchemaAction().getSelectedXmlFile().getAbsolutePath());
+			p = WalkEngine.getPackage(selectedFile.getAbsolutePath());
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		walker.tree.model.workspace.Package paket1 = new walker.tree.model.workspace.Package(null);
-		walker.tree.model.workspace.Package podPaket1 = new walker.tree.model.workspace.Package(paket1);
+		workspaceModel.addProject(project1);
+		project1.addPackage(p);
 		
-		paket1.setNazivPaketa("paket1");
-		podPaket1.setNazivPaketa("pod paket paketa 1");
+		SwingUtilities.updateComponentTreeUI(workspaceTree);
 		
-		//dodela paketa projektu
-		project1.addPackage(paket1);
-		
-		//dodela paketa paketu
-		paket1.addPackageToPackage(podPaket1);
-		
-		//dodela projekata workspace-u
-		workspaceTree.addProject(project1);
-		workspaceTree.addProject(project2);
 		
 		JPanel leftPanel = new JPanel(new BorderLayout());
 		leftPanel.setMinimumSize(new Dimension(250, 250));
