@@ -1,5 +1,6 @@
 package walker.main;
 
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -29,8 +30,7 @@ public class AppState extends Observable
 	public void setCurrentTable(Table currentTable)
 	{
 		this.currentTable = currentTable;
-		setChanged();
-		notifyObservers(CURRENT_TABLE_CHANGED);
+		changeAndNotify(CURRENT_TABLE_CHANGED);
 	}
 	
 	public void setCurrentTable(String code)
@@ -50,8 +50,7 @@ public class AppState extends Observable
 		mapTables(schemaModel);
 		
 		currentTable = null;
-		setChanged();
-		notifyObservers(SCHEMA_MODEL_CHANGED);
+		changeAndNotify(SCHEMA_MODEL_CHANGED);
 	}
 	
 	private void mapTables(Package pack)
@@ -70,5 +69,11 @@ public class AppState extends Observable
 	public Table getTable(String code)
 	{
 		return allTables.get(code);
+	}
+	
+	private void changeAndNotify(String changeType)
+	{
+		setChanged();
+		notifyObservers(changeType);
 	}
 }
