@@ -19,7 +19,7 @@ public class MainToolBar extends JToolBar
 		add(parentsCombobox);
 	}
 	
-	public void update(Table table)
+	public void updateData(Table table)
 	{
 		parentsCombobox.update(table);
 	}

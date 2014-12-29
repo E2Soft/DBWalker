@@ -171,16 +171,16 @@ public class MainForm extends JFrame implements Observer{
 				
 				centralTablePanel.updateData(appState.getCurrentTable(), null);
 				childrenTablePanel.update(appState.getCurrentTable(), null);
-				mainToolBar.update(appState.getCurrentTable());
+				mainToolBar.updateData(appState.getCurrentTable());
 			}
 			else if(AppState.SCHEMA_MODEL_CHANGED.equals(arg))
 			{
-				showChildrenPanel(false);
-				// TODO SCHEMA_MODEL_CHANGED
 				// ako je promenjena sema obrisi podatke iz tabela i updateuj stablo
-				//parentPanel.updateData(null);
-				//childrenPanel.updateData(null);
-				//tree.updateData(appState.getSchemaModel());
+				showChildrenPanel(false);
+				centralTablePanel.updateData(null, null);
+				childrenTablePanel.update(null, null);
+				mainToolBar.updateData(null);
+				// TODO tree.updateData(appState.getSchemaModel());
 			}
 		}
 	}

@@ -53,6 +53,13 @@ public class TablePanel extends JPanel{
 	public void updateData(Table table, RowData foreignKey)
 	{
 		this.table = table;
+		
+		if(table == null)
+		{
+			panelTable.setModel(new GenericTableModel());
+			return;
+		}
+		
 		columns = table.getColumns();
 		List<List<String>> data = null;
 

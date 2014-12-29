@@ -49,6 +49,11 @@ public class ParentsComboBox extends JComboBox<String>
 	{
 		removeAllItems();
 		
+		if(table == null)
+		{
+			return;
+		}
+		
 		if(table.getParrents().isEmpty())
 		{
 			addItem(NO_PARENTS);

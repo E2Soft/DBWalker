@@ -84,7 +84,13 @@ public class ChildrenTablePanel extends JPanel
 
 	public void update(Table table, RowData selectedRowData)
 	{
+		if(table == null)
+		{
+			return;
+		}
+		
 		childrenTables = table.getChildren();
+		
 		updateForeignKeys(table, selectedRowData);
 
 		int childrenNumber = childrenTables.size();

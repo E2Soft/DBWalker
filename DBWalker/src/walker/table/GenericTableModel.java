@@ -1,5 +1,6 @@
 package walker.table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -11,8 +12,13 @@ public class GenericTableModel extends AbstractTableModel{
     protected List<String> columns;
     protected List<List<String>> data;
     
+    public GenericTableModel()
+    {
+    	this.columns = new ArrayList<>();
+        this.data = new ArrayList<>();
+    }
+    
     public GenericTableModel(List<String> columns, List<List<String>> data) {
-        super();
         this.columns = columns;
         this.data = data;
     } 
