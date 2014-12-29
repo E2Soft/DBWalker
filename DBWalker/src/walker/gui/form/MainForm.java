@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -108,6 +109,7 @@ public class MainForm extends JFrame implements Observer{
 		Package p = null;
 		File selectedFile = null;
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Extensible Markup Language File (*.xml)", "xml"));
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 		int result = fileChooser.showOpenDialog(this);
 		if(result == JFileChooser.APPROVE_OPTION){
