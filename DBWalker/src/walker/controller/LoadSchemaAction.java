@@ -38,6 +38,7 @@ public class LoadSchemaAction implements ActionListener
 	{
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Phisical Data Model (*.pdm)", "pdm"));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Phisical Data Model (*.xml)", "xml"));
 		
 		int returnVal = fileChooser.showOpenDialog(null);
 		System.out.println(returnVal);
