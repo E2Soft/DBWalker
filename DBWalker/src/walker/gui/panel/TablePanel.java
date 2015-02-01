@@ -1,8 +1,8 @@
+
 package walker.gui.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Label;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class TablePanel extends JPanel{
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setPreferredSize(new Dimension(0, 0));
-		add(scrollPane, BorderLayout.CENTER);
+		add(scrollPane);
 		panelTable = new JTable();
 		panelTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		centerRenderer = new DefaultTableCellRenderer();
@@ -103,5 +103,10 @@ public class TablePanel extends JPanel{
 	public Table getCurrentTable()
 	{
 		return table;
+	}
+	
+	public void clearSelection()
+	{
+		panelTable.clearSelection();
 	}
 }
