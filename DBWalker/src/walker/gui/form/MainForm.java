@@ -43,17 +43,17 @@ public class MainForm extends JFrame implements Observer{
 	public MainForm(Controller controller, TableData tableData) {
 		initMainFrame();
 		
-		initTreeWorkspace();
+		initTreeWorkspace(controller);
 		
 		initMainLayout(controller, tableData);
 		
 		positionAndShow();		
 	}
 	
-	private void initTreeWorkspace(){
+	private void initTreeWorkspace(Controller controller){
 		
 		workspaceModel = new WorkspaceModel();
-		workspaceTree=new WorkspaceTree();
+		workspaceTree=new WorkspaceTree(controller);
 		
 //		Project p = new Project("p1");
 //		workspaceModel.addProject(p);
@@ -98,29 +98,6 @@ public class MainForm extends JFrame implements Observer{
 		//tree
 		
 		JScrollPane treeScroll = new JScrollPane(workspaceTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-		
-		//test part
-		/*Project project1 = new Project("project1");
-		Package p = null;
-		File selectedFile = null;
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFileFilter(new FileNameExtensionFilter("Extensible Markup Language File (*.xml)", "xml"));
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		int result = fileChooser.showOpenDialog(this);
-		if(result == JFileChooser.APPROVE_OPTION){
-			selectedFile = fileChooser.getSelectedFile();
-		}
-			
-			
-		try {
-			//p = WalkEngine.getPackage(controller.getLoadSchemaAction().getSelectedXmlFile().getAbsolutePath());
-			p = WalkEngine.getPackage(selectedFile.getAbsolutePath());
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 		
 		JPanel treePanel = new JPanel(new BorderLayout());
 		treePanel.setMinimumSize(new Dimension(250, 250));
