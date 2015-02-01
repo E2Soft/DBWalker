@@ -16,6 +16,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import walker.controller.Controller;
+import walker.controller.LoadSchemaAction;
+import walker.gui.menu.MenuBar;
 import walker.gui.panel.ChildrenTablePanel;
 import walker.gui.panel.TablePanel;
 import walker.gui.toolbar.MainToolBar;
@@ -39,6 +41,7 @@ public class MainForm extends JFrame implements Observer{
     private MainToolBar mainToolBar;
     private JScrollPane centralScroll;
     private int horizontalDeviderLocation;
+    protected MenuBar menu;
     
 	public MainForm(Controller controller, TableData tableData) {
 		initMainFrame();
@@ -47,7 +50,14 @@ public class MainForm extends JFrame implements Observer{
 		
 		initMainLayout(controller, tableData);
 		
+		initMenu(controller.getLoadSchemaAction());
+		
 		positionAndShow();		
+	}
+	
+	private void initMenu(LoadSchemaAction appState) {
+		menu = new MenuBar(appState);
+		setJMenuBar(menu);
 	}
 	
 	private void initTreeWorkspace(Controller controller){
