@@ -20,8 +20,6 @@ import walker.engine.WalkEngine;
 import walker.engine.model.Package;
 import walker.main.AppState;
 
-
-
 public class LoadSchemaAction implements ActionListener
 {
 	private AppState appState;
