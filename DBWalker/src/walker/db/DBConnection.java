@@ -44,6 +44,8 @@ public class DBConnection {
 		Class.forName(driver); //Registrovanje drajvera
 		conn = DriverManager.getConnection(url, username, password);
 		conn.setAutoCommit(false);
+		conn.setReadOnly(true);
+		conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 	}
 
 	public static void close() {

@@ -69,7 +69,13 @@ public class Workspace  implements TreeNode{
 	public int getProjectsCount() {
 		return projects.size();
 	}
+	
+	public void clearProjects()
+	{
+		projects.clear();
+	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Enumeration children() {
 		// TODO Auto-generated method stub

@@ -29,6 +29,11 @@ public class WorkspaceModel extends DefaultTreeModel {
 	public void addProject(Project project) {
 		((Workspace) getRoot()).addProject(project);
 	}
+	
+	public void clearProjects()
+	{
+		((Workspace) getRoot()).clearProjects();
+	}
 
 	public Object getChild(Object parent, int index) {
 

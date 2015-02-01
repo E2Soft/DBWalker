@@ -3,12 +3,9 @@ package walker.gui.form;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,14 +14,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 import walker.controller.Controller;
-import walker.engine.WalkEngine;
-import walker.engine.model.Package;
 import walker.gui.panel.ChildrenTablePanel;
 import walker.gui.panel.TablePanel;
 import walker.gui.toolbar.MainToolBar;
@@ -110,7 +101,7 @@ public class MainForm extends JFrame implements Observer{
 		
 		
 		//test part
-		Project project1 = new Project("project1");
+		/*Project project1 = new Project("project1");
 		Package p = null;
 		File selectedFile = null;
 		JFileChooser fileChooser = new JFileChooser();
@@ -129,12 +120,7 @@ public class MainForm extends JFrame implements Observer{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		workspaceModel.addProject(project1);
-		project1.addPackage(p);
-		
-		SwingUtilities.updateComponentTreeUI(workspaceTree);
-		
+		*/
 		
 		JPanel treePanel = new JPanel(new BorderLayout());
 		treePanel.setMinimumSize(new Dimension(250, 250));
@@ -175,12 +161,18 @@ public class MainForm extends JFrame implements Observer{
 			}
 			else if(AppState.SCHEMA_MODEL_CHANGED.equals(arg))
 			{
-				// ako je promenjena sema obrisi podatke iz tabela i updateuj stablo
+				// ako je promenjena sema obrisi podatke iz tabela 
 				showChildrenPanel(false);
 				centralTablePanel.updateData(null, null);
 				childrenTablePanel.update(null, null);
 				mainToolBar.updateData(null);
-				// TODO tree.updateData(appState.getSchemaModel());
+				
+				// i updateuj stablo
+				Project project1 = new Project("project1");
+				workspaceModel.clearProjects();
+				workspaceModel.addProject(project1);
+				project1.addPackage(appState.getSchemaModel());
+				SwingUtilities.updateComponentTreeUI(workspaceTree);
 			}
 		}
 	}

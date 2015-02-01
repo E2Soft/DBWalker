@@ -36,8 +36,8 @@ public class LoadSchemaAction implements ActionListener
 	{
 		try
 		{
-			loadXml();
 			loadDBLoginData();
+			loadXml();
 		} 
 		catch (Exception e1)
 		{}

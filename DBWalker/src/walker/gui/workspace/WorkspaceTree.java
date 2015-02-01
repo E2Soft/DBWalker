@@ -3,7 +3,6 @@ package walker.gui.workspace;
 
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.tree.DefaultTreeCellRenderer;
 
 import walker.controller.workspace.WorkspaceTreeController;
 import walker.tree.model.workspace.Project;

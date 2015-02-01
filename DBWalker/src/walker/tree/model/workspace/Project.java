@@ -2,7 +2,9 @@ package walker.tree.model.workspace;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+
 import walker.engine.model.Package;
+
 import javax.swing.tree.TreeNode;
 
 /**
@@ -35,6 +37,7 @@ public class Project implements TreeNode{
 		return nazivProjekta;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Enumeration<Package> children() {
 		return (Enumeration<Package>)paketi;
