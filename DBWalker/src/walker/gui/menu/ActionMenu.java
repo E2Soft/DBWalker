@@ -4,6 +4,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import walker.controller.LoadSchemaAction;
+import walker.gui.menu.action.ClearAction;
+import walker.gui.menu.action.LoadAction;
 
 public class ActionMenu extends JMenu {
 

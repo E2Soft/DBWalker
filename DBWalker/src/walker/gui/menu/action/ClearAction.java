@@ -1,4 +1,4 @@
-package walker.gui.menu;
+package walker.gui.menu.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -6,9 +6,14 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
+import walker.gui.panel.TablePanel;
+
 public class ClearAction extends AbstractAction {
 
-	public ClearAction() {
+	protected TablePanel centralTablePanel;
+	
+	public ClearAction(TablePanel centralTablePanel) {
+		this.centralTablePanel = centralTablePanel;
 		putValue(NAME,"Clear filter");
 		putValue(SHORT_DESCRIPTION, "Clear current filter");
 		putValue(MNEMONIC_KEY, KeyEvent.VK_C);
@@ -16,7 +21,6 @@ public class ClearAction extends AbstractAction {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
