@@ -3,7 +3,6 @@ package walker.gui.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +53,11 @@ public class TablePanel extends JPanel{
 		panelTable.setDefaultRenderer(Object.class, centerRenderer);
 		scrollPane.setViewportView(panelTable);
 	}
+	
+	public void updateData(Table table)
+	{
+		updateData(table, null);
+	}
 
 	public void updateData(Table table, RowData foreignKey)
 	{
@@ -81,7 +85,6 @@ public class TablePanel extends JPanel{
 
 		genericTableModel = new GenericTableModel(columns, data);
 		panelTable.setModel(genericTableModel);
-
 	}
 
 	public void addListSelectionListener(ListSelectionListener selectionListener)
@@ -117,5 +120,15 @@ public class TablePanel extends JPanel{
 	public void clearSelection()
 	{
 		panelTable.clearSelection();
+	}
+	
+	public void refreshData()
+	{
+		updateData(table);
+	}
+	
+	public void clearData()
+	{
+		updateData(null);
 	}
 }

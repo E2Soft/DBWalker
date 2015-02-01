@@ -23,4 +23,9 @@ public class MainToolBar extends JToolBar
 	{
 		parentsCombobox.update(table);
 	}
+	
+	public void clearData()
+	{
+		updateData(null);
+	}
 }

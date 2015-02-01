@@ -9,7 +9,7 @@ import javax.swing.KeyStroke;
 import walker.controller.LoadSchemaAction;
 
 public class LoadAction extends AbstractAction {
-
+	private static final long serialVersionUID = 1L;
 	protected LoadSchemaAction appState;
 	
 	public LoadAction(LoadSchemaAction appState) {

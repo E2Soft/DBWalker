@@ -56,7 +56,6 @@ public class Workspace  implements TreeNode{
 
 	public void addProject(Project project){
 		projects.add(project);
-		project.setName("Project " + projects.size());
 	}
 	
 	public Project getProject(int index) {

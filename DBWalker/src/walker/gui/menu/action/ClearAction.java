@@ -9,7 +9,7 @@ import javax.swing.KeyStroke;
 import walker.gui.panel.TablePanel;
 
 public class ClearAction extends AbstractAction {
-
+	private static final long serialVersionUID = 1L;
 	protected TablePanel centralTablePanel;
 	
 	public ClearAction(TablePanel centralTablePanel) {

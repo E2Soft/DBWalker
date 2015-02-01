@@ -40,6 +40,8 @@ public class ChildrenTablePanel extends JPanel
 	Map<String, RowData> foreignKeys;
 	private int leftIndex = 0;
 	private int rightIndex = 1;
+	
+	private Table parentTable;
 
 	public ChildrenTablePanel(Controller controller, TableData tableData)
 	{
@@ -81,11 +83,19 @@ public class ChildrenTablePanel extends JPanel
 		panel.add(splitPane, BorderLayout.CENTER);
 		add(panel, BorderLayout.CENTER);
 	}
-
-	public void update(Table table, RowData selectedRowData)
+	
+	public void updateData(Table table)
 	{
+		updateData(table, null);
+	}
+
+	public void updateData(Table table, RowData selectedRowData)
+	{
+		parentTable = table;
+		
 		if(table == null)
 		{
+			clearData();
 			return;
 		}
 		
@@ -239,5 +249,17 @@ public class ChildrenTablePanel extends JPanel
 
 			updateChildrenData();
 		}
+	}
+	
+	public void clearData()
+	{
+		firstChildTablePanel.clearData();
+		secondChildTablePanel.clearData();
+		parentTable = null;
+	}
+	
+	public void refreshData()
+	{
+		updateData(parentTable);
 	}
 }

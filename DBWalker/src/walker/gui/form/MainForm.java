@@ -56,7 +56,7 @@ public class MainForm extends JFrame implements Observer{
 	}
 	
 	private void initMenu(LoadSchemaAction appState) {
-		menu = new MenuBar(appState, centralTablePanel);
+		menu = new MenuBar(appState, centralTablePanel, this);
 		setJMenuBar(menu);
 	}
 	
@@ -142,20 +142,20 @@ public class MainForm extends JFrame implements Observer{
 				// ako ima dece prikazi donji panel, inace sakrij
 				showChildrenPanel(!appState.getCurrentTable().getChildren().isEmpty());
 				
-				centralTablePanel.updateData(appState.getCurrentTable(), null);
-				childrenTablePanel.update(appState.getCurrentTable(), null);
+				centralTablePanel.updateData(appState.getCurrentTable());
+				childrenTablePanel.updateData(appState.getCurrentTable());
 				mainToolBar.updateData(appState.getCurrentTable());
 			}
 			else if(AppState.SCHEMA_MODEL_CHANGED.equals(arg))
 			{
 				// ako je promenjena sema obrisi podatke iz tabela 
 				showChildrenPanel(false);
-				centralTablePanel.updateData(null, null);
-				childrenTablePanel.update(null, null);
-				mainToolBar.updateData(null);
+				centralTablePanel.clearData();
+				childrenTablePanel.clearData();
+				mainToolBar.clearData();
 				
 				// i updateuj stablo
-				Project project1 = new Project("project1");
+				Project project1 = new Project("Project");
 				workspaceModel.clearProjects();
 				workspaceModel.addProject(project1);
 				project1.addPackage(appState.getSchemaModel());
@@ -209,7 +209,13 @@ public class MainForm extends JFrame implements Observer{
 				return;
 			}
 			
-			childrenTablePanel.update(centralTablePanel.getCurrentTable(), centralTablePanel.getSelectedRowData());
+			childrenTablePanel.updateData(centralTablePanel.getCurrentTable(), centralTablePanel.getSelectedRowData());
 		}
+	}
+	
+	public void refreshData()
+	{
+		centralTablePanel.refreshData();
+		childrenTablePanel.refreshData();
 	}
 }

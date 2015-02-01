@@ -62,6 +62,8 @@ public class LoadSchemaAction implements ActionListener
 				Package schemaModel = WalkEngine.getPackage(selektovaniFajl.getPath());
 
 				appState.setSchemaModel(schemaModel);
+				
+				appState.setCurrentTable(schemaModel.getTables().values().iterator().next());
 			}
 			catch (ParserConfigurationException | SAXException ex)
 			{

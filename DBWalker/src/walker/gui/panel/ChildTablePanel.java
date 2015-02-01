@@ -41,4 +41,9 @@ public class ChildTablePanel extends JPanel{
         upBtn.setActionCommand(table.getCode());
         tablePanel.updateData(table, foreignKey);      
     }
+    
+    public void clearData()
+    {
+    	tablePanel.clearData();
+    }
 }
