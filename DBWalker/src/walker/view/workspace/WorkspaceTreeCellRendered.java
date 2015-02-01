@@ -8,7 +8,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import walker.engine.model.Package;
+import walker.engine.model.Table;
 import walker.tree.model.workspace.Project;
+import walker.tree.model.workspace.Workspace;
 
 /**
  * 
@@ -36,20 +39,18 @@ public class WorkspaceTreeCellRendered extends DefaultTreeCellRenderer{
                   
              
              if (value instanceof Package ) {
-                 URL imageURL = getClass().getResource("images/package.gif");
-                 Icon icon = null;
-                 if (imageURL != null)                       
-                     icon = new ImageIcon(imageURL);
-                 setIcon(icon);
+                 setIcon(new ImageIcon("icons/package_obj.gif"));
  
              } else if (value instanceof Project ) {
-                 URL imageURL = getClass().getResource("images/project.gif");
-                 Icon icon = null;
-                 if (imageURL != null)                       
-                     icon = new ImageIcon(imageURL);
-                 setIcon(icon);
+            	 setIcon(new ImageIcon("icons/repository.gif"));
                    
-            } 
+            } else if (value instanceof Table ) {
+                setIcon(new ImageIcon("icons/table.gif"));
+                  
+           } else if (value instanceof Workspace ) {
+               setIcon(new ImageIcon("icons/submodules.gif"));
+               
+          } 
              
             return this;
 }
