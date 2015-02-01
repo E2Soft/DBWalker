@@ -103,4 +103,9 @@ public class TablePanel extends JPanel{
 	{
 		return table;
 	}
+	
+	public void clearSelection()
+	{
+		panelTable.clearSelection();
+	}
 }
