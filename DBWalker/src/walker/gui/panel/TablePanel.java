@@ -3,6 +3,7 @@ package walker.gui.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +31,13 @@ public class TablePanel extends JPanel{
 	private List<String> columns;
 	private DefaultTableCellRenderer centerRenderer;
 	private Table table;
+	protected JLabel tableName = new JLabel();
 
 	public TablePanel(TableData tableData) {
 		this.tableData = tableData;
 		columns = new ArrayList<String>();
-		initComponents();      
+		tableName.setHorizontalAlignment(JLabel.CENTER);
+		initComponents();    
 	}
 
 	public void initComponents(){
@@ -42,7 +45,8 @@ public class TablePanel extends JPanel{
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setPreferredSize(new Dimension(0, 0));
-		add(scrollPane);
+		TablePanel.this.add(tableName,BorderLayout.NORTH);
+		add(scrollPane,BorderLayout.CENTER);
 		panelTable = new JTable();
 		panelTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		centerRenderer = new DefaultTableCellRenderer();
@@ -57,9 +61,14 @@ public class TablePanel extends JPanel{
 		
 		if(table == null)
 		{
+			//ako je null nema naziva
+			tableName.setText("");
 			panelTable.setModel(new GenericTableModel());
 			return;
 		}
+		
+		//izmeni nazive
+		tableName.setText(table.getName());
 		
 		columns = table.getColumns();
 		List<List<String>> data = null;

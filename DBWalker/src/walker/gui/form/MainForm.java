@@ -56,7 +56,7 @@ public class MainForm extends JFrame implements Observer{
 	}
 	
 	private void initMenu(LoadSchemaAction appState) {
-		menu = new MenuBar(appState);
+		menu = new MenuBar(appState, centralTablePanel);
 		setJMenuBar(menu);
 	}
 	
